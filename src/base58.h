@@ -276,8 +276,8 @@ class CBitcoinAddress : public CBase58Data
 public:
     enum
     {
-        PUBKEY_ADDRESS = 8,
-        SCRIPT_ADDRESS = 20,
+        PUBKEY_ADDRESS = 98,  // bitgem: address begin with 'g'
+        SCRIPT_ADDRESS = 8, 
         PUBKEY_ADDRESS_TEST = 111,
         SCRIPT_ADDRESS_TEST = 196,
     };
