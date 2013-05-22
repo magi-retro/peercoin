@@ -947,35 +947,28 @@ int64 GetProofOfWorkReward(unsigned int nBits)
 
     // BitGem: subsidy is cut in half every 64x multiply of PoW difficulty
     // A reasonably continuous curve is used to avoid shock to market
-    // (nSubsidyLimit / nSubsidy) ** 4 == bnProofOfWorkLimit / bnTarget
+    // (nSubsidyLimit / nSubsidy) ** 6 == bnProofOfWorkLimit / bnTarget
     //
     // Human readable form:
     //
-    // nSubsidy = 100 / (diff ^ 1/4)
+    // nSubsidy = 100 / (diff ^ 1/6)
     CBigNum bnLowerBound = CENT;
     CBigNum bnUpperBound = bnSubsidyLimit;
-    // Smoother decrease of reward for low difficulty for 
-	int64 nSubsidy; 
-    if (bnTargetLimit / bnTarget < 1) {
-            printf("GetProofOfWorkReward() : Difficulty too low.");
-			nSubsidy= MAX_MINT_PROOF_OF_WORK;
-
-    } else {
-
-		while (bnLowerBound + CENT <= bnUpperBound)
-		{
-		    CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
-		    if (fDebug && GetBoolArg("-printcreation"))
-		        printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
-		    if ( bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
-		        bnUpperBound = bnMidValue;
-		    else
-		        bnLowerBound = bnMidValue;
-		}
-
-		int64 nSubsidy = bnUpperBound.getuint64();
-		nSubsidy = (nSubsidy / CENT) * CENT;
+    while (bnLowerBound + CENT <= bnUpperBound)
+    {
+        CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
+        if (fDebug && GetBoolArg("-printcreation"))
+            printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
+        if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
+            bnUpperBound = bnMidValue;
+        else
+            bnLowerBound = bnMidValue;
     }
+
+	int64 nSubsidy = bnUpperBound.getuint64();
+	// nSubsidy = (nSubsidy / CENT) * CENT;
+
+
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfWorkReward() : create=%s nBits=0x%08x nSubsidy=%"PRI64d"\n", FormatMoney(nSubsidy).c_str(), nBits, nSubsidy);
 
@@ -2074,7 +2067,8 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
         return DoS(50, error("CheckBlock() : coinstake timestamp violation nTimeBlock=%"PRI64d" nTimeTx=%u", GetBlockTime(), vtx[1].nTime));
 
     // Check coinbase reward
-    if (vtx[0].GetValueOut() > (IsProofOfWork()? (GetProofOfWorkReward(nBits) - vtx[0].GetMinFee() + MIN_TX_FEE) : 0))
+
+    if (vtx[0].GetValueOut() > (IsProofOfWork()? MAX_MINT_PROOF_OF_WORK : 0))
         return DoS(50, error("CheckBlock() : coinbase reward exceeded %s > %s", 
                    FormatMoney(vtx[0].GetValueOut()).c_str(),
                    FormatMoney(IsProofOfWork()? GetProofOfWorkReward(nBits) : 0).c_str()));
