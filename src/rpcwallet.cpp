@@ -9,6 +9,12 @@
 #include "init.h"
 #include "base58.h"
 
+#include "gem.h"
+
+#include <algorithm>
+#include <string>
+#include <boost/algorithm/string.hpp>
+
 using namespace json_spirit;
 using namespace std;
 
@@ -311,6 +317,185 @@ Value sendtoaddress(const Array& params, bool fHelp)
 
     return wtx.GetHash().GetHex();
 }
+
+
+Value getgems(const Array& params, bool fHelp)
+{   // getgems <type> <carat> <color> <clarity> <cut> <shape> [<amount>]
+    if (fHelp || params.size() < 6 || params.size() > 7)
+        throw runtime_error(
+            "getgems translates BTGs amount into gemstones defined by means of the especified properties in params, returning the equivalent amount.\n"
+            "getgems <type> <carat> <color> <clarity> <cut> <shape> [<amount>]\n"
+            "getgems <type> : DIAMOND, RUBY, SAPPHIRE, EMERALD.\n"
+            "getgems <carat> : double.\n"
+            "getgems <color> : range D-Z.\n"
+            "getgems <clarity> : clarity levels I3, I2, I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF, FL.\n"
+            "getgems <cut> : cut proportions levels POOR, FAIR, GOOD, VERY_GOOD, EXCELLENT.\n"
+            "getgems <shape> : valid shapes TRILLION, TRIANGLE, EMERALD_SHAPE, RECTANGLE, TAPERED_BAGUETTE, BAGUETTE, SQUARE_CUSHION, SQUARE_EMERALD, SQUARE, HEART, MARQUISE,  PEAR, OVAL, ROUND.\n"
+            "getgems [<amount>] : amount of BTGs to translate. By default, account balance.\n"       
+           + HelpRequiringPassphrase());
+	
+    Value type_value = params[0]; 
+    Value carat_value = params[1]; 
+    Value color_value = params[2]; 
+    Value clarity_value = params[3]; 
+    Value cut_value = params[4]; 
+    Value shape_value = params[5]; 
+    Value bitgems_value;
+
+
+ 
+
+   // carat 
+    double  carat = strtod(carat_value.get_str().c_str(), NULL);
+
+
+    //bitgems  
+     double  bitgems = 1.0;
+     if (params.size() == 7) {
+	bitgems_value = params[6];
+        bitgems = strtod(bitgems_value.get_str().c_str(), NULL);
+     }
+     else  
+	bitgems = ValueFromAmount(pwalletMain->GetBalance()).get_real();
+   
+ 
+
+
+    printf("getgems(): type=%s\n", type_value.get_str().c_str());
+    printf("getgems(): carat=%f\n", carat);
+    printf("getgems(): color=%s\n", color_value.get_str().c_str());
+    printf("getgems(): clarity=%s\n", clarity_value.get_str().c_str());
+    printf("getgems(): cut=%s\n", cut_value.get_str().c_str());
+    printf("getgems(): shape=%s\n", shape_value.get_str().c_str());
+    printf("getgems(): bitgems=%f\n", bitgems);
+
+
+
+    
+    // type
+    std::string type_str =  type_value.get_str();
+    std::string  type_str_up = boost::to_upper_copy(type_str);
+    unsigned int type=SAPPHIRE;
+
+    printf("getgems(): type_str_up=%s\n", type_str_up.c_str());
+    if (!type_str_up.compare("DIAMOND"))
+    type = DIAMOND;
+    else if (!type_str_up.compare("RUBY"))
+    type = RUBY;
+    else if (!type_str_up.compare("SAPPHIRE"))
+    type = SAPPHIRE;
+    else if (!type_str_up.compare("EMERALD"))
+    type = EMERALD;
+    else  throw JSONRPCError(-101, "Gem type not recognized. Valid types: DIAMOND, RUBY, SAPPHIRE, EMERALD.");
+
+	
+    // carat
+    //double carat = carat_value.get_real();
+    
+    // color
+    std::string color_str =  color_value.get_str();
+    std::string  color_str_up = boost::to_upper_copy(color_str);   
+    unsigned int color = color_str_up[0];
+    if ((color <'D') || (color > 'Z'))
+	throw JSONRPCError(-101, "Gem color not recognized. Valid range: D-Z");
+
+    // clarity
+    std::string clarity_str =  clarity_value.get_str();
+    std::string  clarity_str_up = boost::to_upper_copy(clarity_str);
+    unsigned int clarity = VVS2;
+    printf("getgems(): clarity_str_up=%s\n", clarity_str_up.c_str());
+    if (!clarity_str_up.compare("I3"))
+    clarity = I3;
+    else if (!clarity_str_up.compare("I2"))
+    clarity = I2;
+    else if (!clarity_str_up.compare("I1"))
+    clarity = I1;
+    else if (!clarity_str_up.compare("SI2"))
+    clarity = SI2;
+    else if (!clarity_str_up.compare("SI1"))
+    clarity = SI1;
+    else if (!clarity_str_up.compare("VS2"))
+    clarity = VS2;
+    else if (!clarity_str_up.compare("VS1"))
+    clarity = VS1;
+    else if (!clarity_str_up.compare("VVS2"))
+    clarity = VVS2;
+    else if (!clarity_str_up.compare("VVS1"))
+    clarity = VVS1;
+    else if (!clarity_str_up.compare("IF"))
+    clarity = IF;
+    else if (!clarity_str_up.compare("FL"))
+    clarity = FL;
+    else  throw JSONRPCError(-101, "Gem clarity not recognized. Valid clarity levels: I3, I2, I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF, FL");
+
+
+    // cut proportions
+    std::string cut_str =  cut_value.get_str();
+    std::string  cut_str_up = boost::to_upper_copy(cut_str);
+    unsigned int cut = GOOD;
+    printf("getgems(): cut_str_up=%s\n", cut_str_up.c_str());
+    if (!cut_str_up.compare("POOR"))
+    cut = POOR;
+    else if (!cut_str_up.compare("FAIR"))
+    cut = FAIR;
+    else if (!cut_str_up.compare("GOOD"))
+    cut = GOOD;
+    else if (!cut_str_up.compare("VERY_GOOD"))
+    cut = VERY_GOOD;
+    else if (!cut_str_up.compare("EXCELLENT"))
+    cut = EXCELLENT;
+    else  throw JSONRPCError(-101, "Gem cut not recognized. Valid cut proportions: POOR, FAIR, GOOD, VERY_GOOD, EXCELLENT");
+
+    // shape
+    std::string shape_str =  shape_value.get_str();
+    std::string  shape_str_up = boost::to_upper_copy(shape_str);
+    unsigned int shape = OVAL;
+    printf("getgems(): shape_str_up=%s\n", shape_str_up.c_str());
+    if (!shape_str_up.compare("TRILLION"))
+    shape = TRILLION;
+    else if (!shape_str_up.compare("TRIANGLE"))
+    shape = TRIANGLE;
+    else if (!shape_str_up.compare("EMERALD_SHAPE"))
+    shape = EMERALD_SHAPE;
+    else if (!shape_str_up.compare("RECTANGLE"))
+    shape = RECTANGLE;
+    else if (!shape_str_up.compare("TAPERED_BAGUETTE"))
+    shape = TAPERED_BAGUETTE;
+    else if (!shape_str_up.compare("BAGUETTE"))
+    shape = BAGUETTE;
+    else if (!shape_str_up.compare("SQUARE_CUSHION"))
+    shape = SQUARE_CUSHION;
+    else if (!shape_str_up.compare("SQUARE_EMERALD"))
+    shape = SQUARE_EMERALD;
+    else if (!shape_str_up.compare("SQUARE"))
+    shape = SQUARE;
+    else if (!shape_str_up.compare("HEART"))
+    shape = HEART;
+    else if (!shape_str_up.compare("MARQUISE"))
+    shape = MARQUISE;
+    else if (!shape_str_up.compare("PEAR"))
+    shape = PEAR;
+    else if (!shape_str_up.compare("OVAL"))
+    shape = OVAL;
+    else if (!shape_str_up.compare("ROUND"))
+    shape = ROUND;
+    else  throw JSONRPCError(-101, "Gem shape not recognized. Valid shapes: TRILLION, TRIANGLE, EMERALD_SHAPE, RECTANGLE, TAPERED_BAGUETTE, BAGUETTE, SQUARE_CUSHION, SQUARE_EMERALD, SQUARE, HEART, MARQUISE,  PEAR,  ROUND");
+
+
+    printf("getgems(): type=%s\n", type_str_up.c_str());
+    printf("getgems(): carat=%f\n", carat);
+    printf("getgems(): color=%c\n", color);
+    printf("getgems(): clarity=%s\n", clarity_str_up.c_str());
+    printf("getgems(): cut=%s\n", cut_str_up.c_str());
+    printf("getgems(): shape=%s\n", shape_str_up.c_str());
+    printf("getgems(): bitgems=%f\n", bitgems);
+
+
+     
+
+    return Gem::getGems(type, carat , color, clarity , cut, shape, bitgems);
+}
+
 
 Value listaddressgroupings(const Array& params, bool fHelp)
 {
