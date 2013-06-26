@@ -8,6 +8,9 @@
 #include <map>
 
 
+static bool gemWallet = true;
+
+
 enum GEM_TYPES {
 	DIAMOND,   // diamond : Mosh level 10
 	RUBY,      // Corundum: Mosh level 9
@@ -98,7 +101,8 @@ public:
    unsigned int color; // 'D' to 'Z'
    unsigned int clarity;
    unsigned int cut;  
-   unsigned int shape;  
+   unsigned int shape;
+
    
 
    Gem(unsigned int type, double carat, unsigned int color, unsigned int clarity, unsigned int cut, unsigned int shape){
@@ -118,5 +122,10 @@ public:
 
   double getGems(double bitgems);
   static double getGems (unsigned int type, double carat, unsigned int color, unsigned int clarity, unsigned int cut, unsigned int shape, double bitgems);	
-   
+  static unsigned int getshapefromindex ( int shapeindex);
+
+  static bool getGemWallet();
+  static void setGemWallet(bool _gemWallet);
+
+
 };
