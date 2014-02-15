@@ -1149,7 +1149,7 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"bitgem.su", "seed.bitgem.su"},
+    {"bitgem.us", "seed.bitgem.us"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1220,7 +1220,7 @@ void ThreadDNSAddressSeed2(void* parg)
 
 unsigned int pnSeed[] =
 {
-	0x58099DD9
+	0x175E0F64, 0xC6002B64, 0x36F6E214, 0x8D65743D
 };
 
 void DumpAddresses()
