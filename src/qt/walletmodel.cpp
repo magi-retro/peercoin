@@ -355,6 +355,19 @@ void WalletModel::unsubscribeFromCoreSignals()
 WalletModel::UnlockContext WalletModel::requestUnlock()
 {
     bool was_locked = getEncryptionStatus() == Locked;
+    
+    
+ // FIX for lock issue
+ 	
+ 	    if ((!was_locked) && fWalletUnlockMintOnly)
+      {
+          setWalletLocked(true);
+          was_locked = getEncryptionStatus() == Locked;
+      }
+ 	
+ 	
+    
+    
     if(was_locked)
     {
         // Request UI to unlock wallet
@@ -363,7 +376,11 @@ WalletModel::UnlockContext WalletModel::requestUnlock()
     // If wallet is still locked, unlock was failed or cancelled, mark context as invalid
     bool valid = getEncryptionStatus() != Locked;
 
-    return UnlockContext(this, valid, was_locked);
+
+   // disabled for unlock fix return UnlockContext(this, valid, was_locked);
+ 	return UnlockContext(this, valid, was_locked && !fWalletUnlockMintOnly);
+    
+    
 }
 
 WalletModel::UnlockContext::UnlockContext(WalletModel *wallet, bool valid, bool relock):
