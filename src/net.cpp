@@ -1187,6 +1187,9 @@ void ThreadDNSAddressSeed(void* parg)
 void ThreadDNSAddressSeed2(void* parg)
 {
     printf("ThreadDNSAddressSeed started\n");
+    
+    static const char *(*strDNSSeed)[2] = fTestNet ? strTestNetDNSSeed : strMainNetDNSSeed;
+    
     int found = 0;
 
     if (!fTestNet)
