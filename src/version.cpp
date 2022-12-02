@@ -11,7 +11,7 @@
 const std::string CLIENT_NAME("X11Coin");
 
 // Client version number
-#define CLIENT_VERSION_SUFFIX   "-so-badger-2.1"
+#define CLIENT_VERSION_SUFFIX   "x11-coin-1.0"
 
 
 // The following part of the code determines the CLIENT_BUILD variable.
