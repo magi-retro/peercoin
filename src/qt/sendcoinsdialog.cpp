@@ -34,7 +34,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 
 #if QT_VERSION >= 0x040700
      /* Do not move this to the XML file, Qt before 4.7 will choke on it */
-     ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a Badgercoin address (e.g. BrXW1RKLDe8VMNwTwLwSiKuATN5M74EL85)"));
+     ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a X11Coin address (e.g. BrXW1RKLDe8VMNwTwLwSiKuATN5M74EL85)"));
 #endif
 
     addEntry();

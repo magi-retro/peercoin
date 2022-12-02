@@ -24,11 +24,11 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
 
 #if (QT_VERSION >= 0x040700)
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
-    ui->addressIn_SM->setPlaceholderText(tr("Enter a valid Badgercoin address"));
+    ui->addressIn_SM->setPlaceholderText(tr("Enter a valid X11Coin address"));
     ui->signatureOut_SM->setPlaceholderText(tr("Click \"Sign Message\" to generate signature"));
 
-    ui->addressIn_VM->setPlaceholderText(tr("Enter a valid Badgercoin address"));
-    ui->signatureIn_VM->setPlaceholderText(tr("Enter Badgercoin signature"));
+    ui->addressIn_VM->setPlaceholderText(tr("Enter a valid X11Coin address"));
+    ui->signatureIn_VM->setPlaceholderText(tr("Enter X11Coin signature"));
 #endif
 
     GUIUtil::setupAddressWidget(ui->addressIn_SM, this);

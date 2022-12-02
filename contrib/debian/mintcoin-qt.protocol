@@ -1,6 +1,6 @@
 [Protocol]
-exec=badgercoin-qt '%u'
-protocol=badgercoin
+exec=x11coin-qt '%u'
+protocol=x11coin
 input=none
 output=none
 helper=true
