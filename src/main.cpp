@@ -43,12 +43,12 @@ static CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 60 * 60 * 24 * 10;	// minimum age for coin age: 2d
-unsigned int nStakeMaxAge = 60* 60 * 24 * 30;	// stake age of full weight: -1
-unsigned int nStakeTargetSpacing = 30;			// 30 sec block spacing
+unsigned int nStakeMinAge = 60 * 60 * 8;	// minimum age for coin age: 3h
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;	// stake age of full weight: -1
+unsigned int nStakeTargetSpacing = 90;			// 90 sec block spacing
 
-int64 nChainStartTime = 1398427917;
-int nCoinbaseMaturity = 100;
+int64 nChainStartTime = 1399495660;
+int nCoinbaseMaturity = 160;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -937,25 +937,18 @@ int generateMTRandom(unsigned int s, int range)
 
 
 
-static const int64 nMinSubsidy = 10 * COIN;
-static const int CUTOFF_HEIGHT = POW_CUTOFF_HEIGHT;	// Height at the end of 2 weeks
+static const int CUTOFF_HEIGHT = POW_CUTOFF_HEIGHT;	
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-    int64 nSubsidy = 160 * COIN;
+    int64 nSubsidy = 333 * COIN;
 
 	if(nHeight == 1)
 	{
-		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
+		nSubsidy = 99000 * COIN;
 		return nSubsidy + nFees;
 	}
 
-	else if(nHeight > CUTOFF_HEIGHT)
-	{
-		return nMinSubsidy + nFees;
-	}
-
-	
      
 
     return nSubsidy + nFees;
@@ -977,8 +970,8 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
     return nSubsidy;
 }
 
-static const int64 nTargetTimespan = 30 * 30;
-static const int64 nTargetSpacingWorkMax = 3 * nStakeTargetSpacing; 
+static const int64 nTargetTimespan = 60 * 60;
+static const int64 nTargetSpacingWorkMax = 2 * nStakeTargetSpacing; 
 
 //
 // maximum nBits value could possible be required nTime after
@@ -2544,7 +2537,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "If you get knocked down, we get knocked up. Thats how life is. Enjoy";
+        const char* pszTimestamp = "7/5/14";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2557,9 +2550,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1398427917;
+        block.nTime    = 1399495660;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 3860056 ;
+        block.nNonce   = 193526;
         if (false ) {
 
         // This will figure out a valid hash and Nonce if you're
