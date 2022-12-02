@@ -8,16 +8,23 @@ CONFIG += no_include_pwd
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 # Change paths if needed, these use the foocoin/deps.git repository locations
 
-#windows:LIBS += -lshlwapi
 
-BOOST_INCLUDE_PATH=C:/deps/boost
-BOOST_LIB_PATH=C:/deps/boost/stage/lib
+windows:LIBS += -lshlwapi
+LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,)
+LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
+windows:LIBS += -lws2_32 -lole32 -loleaut32 -luuid -lgdi32
+LIBS += -lboost_system-mgw48-mt-sd-1_55 -lboost_filesystem-mgw48-mt-sd-1_55 -lboost_program_options-mgw48-mt-sd-1_55 -lboost_thread-mgw48-mt-sd-1_55
+#LIBS += -lboost_system -lboost_filesystem -lboost_program_options -liboost_thread
+BOOST_LIB_SUFFIX=-mgw48-mt-sd-1_55
+BOOST_INCLUDE_PATH=C:/deps/boost_1_55_0
+BOOST_LIB_PATH=C:/deps/boost_1_55_0/stage/lib
 BDB_INCLUDE_PATH=c:/deps/db/build_unix
 BDB_LIB_PATH=c:/deps/db/build_unix
 OPENSSL_INCLUDE_PATH=c:/deps/ssl/include
 OPENSSL_LIB_PATH=c:/deps/ssl
-MINIUPNPC_LIB_PATH=C:/deps/upnpc-exe-win32
-MINIUPNPC_INCLUDE_PATH=c:/deps
+MINIUPNPC_INCLUDE_PATH=C:/deps/ 
+MINIUPNPC_LIB_PATH=C:/deps/miniupnpc 
+
 
 OBJECTS_DIR = build
 MOC_DIR = build
@@ -338,7 +345,7 @@ OTHER_FILES += \
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
     macx:BOOST_LIB_SUFFIX = -mt
-    windows:BOOST_LIB_SUFFIX = -mgw46-mt-s-1_53
+    windows:BOOST_LIB_SUFFIX = -mgw48-mt-s-1_55
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
