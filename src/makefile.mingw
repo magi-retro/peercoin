@@ -80,9 +80,17 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    obj/scrypt_mine.o \
-    obj/scrypt-x86.o \
-    obj/scrypt-x86_64.o
+    src/blake.o \
+    src/bmw.o \
+    src/groestl.o \
+    src/jh.o \
+    src/keccak.o \
+    src/skein.o \
+    src/luffa.o \
+    src/cubehash.o \
+    src/shavite.o \
+    src/echo.o \
+    src/simd.o
 
 all: badgercoind.exe
 
@@ -91,6 +99,9 @@ test check: test_badgercoin.exe FORCE
 
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
+
+obj/%.o: %.c $(HEADERS)
+	$(CXX) -c $(CFLAGS) -fpermissive -o $@ $<
 
 obj/scrypt-x86.o: scrypt-x86.S
 	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
