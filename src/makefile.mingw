@@ -84,10 +84,10 @@ OBJS= \
     obj/scrypt-x86.o \
     obj/scrypt-x86_64.o
 
-all: whitecoind.exe
+all: badgercoind.exe
 
-test check: test_whitecoin.exe FORCE
-	test_whitecoin.exe
+test check: test_badgercoin.exe FORCE
+	test_badgercoin.exe
 
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<

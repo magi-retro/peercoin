@@ -135,10 +135,10 @@ OBJS= \
     obj/scrypt-x86_64.o
 
 
-all: whitecoind
+all: badgercoind
 
-test check: test_whitecoin FORCE
-	./test_whitecoin
+test check: test_badgercoin FORCE
+	./test_badgercoin
 
 # auto-generated dependencies:
 -include obj/*.P
