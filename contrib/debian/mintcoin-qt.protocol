@@ -1,6 +1,6 @@
 [Protocol]
-exec=whitecoin-qt '%u'
-protocol=whitecoin
+exec=badgercoin-qt '%u'
+protocol=badgercoin
 input=none
 output=none
 helper=true

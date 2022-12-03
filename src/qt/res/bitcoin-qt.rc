@@ -1,4 +1,4 @@
-IDI_ICON1 ICON DISCARDABLE "icons/Whitecoin.ico"
+IDI_ICON1 ICON DISCARDABLE "icons/Badgercoin.ico"
 
 #include <windows.h>             // needed for VERSIONINFO
 #include "../../clientversion.h" // holds the needed client version information
@@ -18,14 +18,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Whitecoin"
-            VALUE "FileDescription",    "Whitecoin-Qt (OSS GUI client for Whitecoin)"
+            VALUE "CompanyName",        "Badgercoin"
+            VALUE "FileDescription",    "Badgercoin-Qt (OSS GUI client for Badgercoin)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "Whitecoin-qt"
-            VALUE "LegalCopyright",     "2009-2012 The Bitcoin developers, 2012-2013 The Whitecoin & PPCoin developers"
+            VALUE "InternalName",       "Badgercoin-qt"
+            VALUE "LegalCopyright",     "2009-2012 The Bitcoin developers, 2012-2013 The Badgercoin & PPCoin developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "Whitecoin-qt.exe"
-            VALUE "ProductName",        "Whitecoin-Qt"
+            VALUE "OriginalFilename",   "Badgercoin-qt.exe"
+            VALUE "ProductName",        "Badgercoin-Qt"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END
