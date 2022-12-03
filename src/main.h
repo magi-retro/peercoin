@@ -10,6 +10,7 @@
 #include "net.h"
 #include "script.h"
 #include "scrypt_mine.h"
+#include "hashblock.h"
 
 #include <list>
 
@@ -30,13 +31,13 @@ static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 30000;
-static const int64 MIN_TX_FEE = .01 * CENT;
-static const int64 MIN_RELAY_TX_FEE = .01 * CENT;
-static const int64 MAX_MONEY = 500000000 * COIN;
-static const int64 MAX_MONEY2 = 300000000 * COIN;			// 70 bil
+static const int64 MIN_TX_FEE = .001 * COIN;
+static const int64 MIN_RELAY_TX_FEE = .001 * COIN;
+static const int64 MAX_MONEY = 10000000 * COIN;
+static const int64 MAX_MONEY2 = 10000000 * COIN;			// 10 mil
 static const int64 CIRCULATION_MONEY = MAX_MONEY2;
-static const double TAX_PERCENTAGE = 0.0078;
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.02 * COIN;	// 5% annual interest
+static const double TAX_PERCENTAGE = 0.02;
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0.15 * COIN;	// 15% annual interest
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
@@ -909,14 +910,7 @@ public:
 
     uint256 GetHash() const
     {
-        uint256 thash;
-        void * scratchbuff = scrypt_buffer_alloc();
-
-        scrypt_hash(CVOIDBEGIN(nVersion), sizeof(block_header), UINTBEGIN(thash), scratchbuff);
-
-        scrypt_buffer_free(scratchbuff);
-
-        return thash;
+            return Hash9(BEGIN(nVersion), END(nNonce));
     }
 
     int64 GetBlockTime() const

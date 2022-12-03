@@ -41,12 +41,12 @@ static CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 60 * 60 * 24 * 2;	// minimum age for coin age: 2d
+unsigned int nStakeMinAge = 60 * 60 * 12;	// minimum age for coin age: 2d
 unsigned int nStakeMaxAge = -1;	// stake age of full weight: -1
-unsigned int nStakeTargetSpacing = 90;			// 90 sec block spacing
+unsigned int nStakeTargetSpacing = 30;			// 30 sec block spacing
 
-int64 nChainStartTime = 1397400948;
-int nCoinbaseMaturity = 350;
+int64 nChainStartTime = 1398427917;
+int nCoinbaseMaturity = 100;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -937,28 +937,18 @@ int generateMTRandom(unsigned int s, int range)
 
 
 static const int64 nMinSubsidy = 10 * COIN;
-static const int CUTOFF_HEIGHT = 10000;	// Height at the end of 5 weeks
+static const int CUTOFF_HEIGHT = 40320;	// Height at the end of 2 weeks
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 30000 * COIN;
-
-    std::string cseed_str = prevHash.ToString().substr(14,7);
-    const char* cseed = cseed_str.c_str();
-    long seed = hex2long(cseed);
-    int rand = generateMTRandom(seed, 8000);
-    
+    int64 nSubsidy = 160 * COIN;
 
 	if(nHeight == 1)
 	{
 		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
 		return nSubsidy + nFees;
 	}
-    else if(nHeight == 2)
-    {
-        nSubsidy = rand * COIN;
-    }
-    
+
 	else if(nHeight > CUTOFF_HEIGHT)
 	{
 		return nMinSubsidy + nFees;
@@ -972,19 +962,12 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 // simple algorithm, not depend on the diff
-const int YEARLY_BLOCKCOUNT = 350400;	// 365 * 2880
+
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight)
 {
     int64 nRewardCoinYear;
 
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
-
-	if(nHeight < 2 * YEARLY_BLOCKCOUNT)
-		nRewardCoinYear = 1 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (4 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 1 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (25 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 1 * MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
@@ -993,7 +976,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
     return nSubsidy;
 }
 
-static const int64 nTargetTimespan = 30 * 30;  
+static const int64 nTargetTimespan = 30 * 30;
 static const int64 nTargetSpacingWorkMax = 3 * nStakeTargetSpacing; 
 
 //
@@ -2061,9 +2044,9 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
     if (IsProofOfStake() && (vtx[0].vout.size() != 1 || !vtx[0].vout[0].IsEmpty()))
         return error("CheckBlock() : coinbase output not empty for proof-of-stake block");
 
-    // Check coinbase timestamp
-    if (GetBlockTime() > (int64)vtx[0].nTime + nMaxClockDrift)
-        return DoS(50, error("CheckBlock() : coinbase timestamp is too early"));
+    // Check timestamp
+    if (GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
+        return DoS(50, error("CheckBlock() : block timestamp too far in the future"));
 
     // Check coinstake timestamp
     if (IsProofOfStake() && !CheckCoinStakeTimestamp(GetBlockTime(), (int64)vtx[1].nTime))
@@ -2530,10 +2513,10 @@ bool LoadBlockIndex(bool fAllowNew)
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xea;
-        pchMessageStart[1] = 0xce;
-        pchMessageStart[2] = 0xed;
-        pchMessageStart[3] = 0xcd;
+        pchMessageStart[0] = 0xdd;
+        pchMessageStart[1] = 0x4d;
+        pchMessageStart[2] = 0xdd;
+        pchMessageStart[3] = 0x4d;
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
@@ -2541,7 +2524,7 @@ bool LoadBlockIndex(bool fAllowNew)
         nStakeMaxAge = 60 * 60; // test net min age is 60 min
 		nModifierInterval = 60; // test modifier interval is 2 minutes
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
-        nStakeTargetSpacing = 3 * 60; // test block spacing is 3 minutes
+        nStakeTargetSpacing = 1 * 30; // test block spacing is 30 seconds
     }
 
     //
@@ -2561,7 +2544,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "I get knocked down but I get up again.";
+        const char* pszTimestamp = "If you get knocked down, we get knocked up. Thats how life is. Enjoy";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2574,10 +2557,10 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1397400948;
+        block.nTime    = 1398427917;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 552634;
-        if (true  && (block.GetHash() != hashGenesisBlock)) {
+        block.nNonce   = 3860056 ;
+        if (false ) {
 
         // This will figure out a valid hash and Nonce if you're
         // creating a different genesis block:
@@ -2889,7 +2872,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xfe, 0xf5, 0xab, 0xaa };
+unsigned char pchMessageStart[4] = { 0xdb, 0xad, 0xbd, 0xda };
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
@@ -4320,9 +4303,11 @@ static bool fGenerateBitcoins = false;
 static bool fLimitProcessors = false;
 static int nLimitProcessors = -1;
 
+
+
 void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
 {
-    void *scratchbuf = scrypt_buffer_alloc();
+
 
     printf("CPUMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
@@ -4376,7 +4361,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
                     continue;
                 }
                 strMintWarning = "";
-                printf("CPUMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str()); 
+                printf("CPUMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str());
                 SetThreadPriority(THREAD_PRIORITY_NORMAL);
                 CheckWork(pblock.get(), *pwalletMain, reservekey);
                 SetThreadPriority(THREAD_PRIORITY_LOWEST);
@@ -4398,7 +4383,8 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
         FormatHashBuffers(pblock.get(), pmidstate, pdata, phash1);
 
         unsigned int& nBlockTime = *(unsigned int*)(pdata + 64 + 4);
-        unsigned int& nBlockNonce = *(unsigned int*)(pdata + 64 + 12);
+        unsigned int& nBlockBits = *(unsigned int*)(pdata + 64 + 8);
+
 
 
         //
@@ -4407,44 +4393,33 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
         int64 nStart = GetTime();
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
-        unsigned int max_nonce = 0xffff0000;
-        block_header res_header;
-        uint256 result;
-
         loop
         {
             unsigned int nHashesDone = 0;
-            unsigned int nNonceFound;
 
-            nNonceFound = scanhash_scrypt(
-                        (block_header *)&pblock->nVersion,
-                        scratchbuf,
-                        max_nonce,
-                        nHashesDone,
-                        UBEGIN(result),
-                        &res_header
-            );
-
-            // Check if something found
-            if (nNonceFound != (unsigned int) -1)
+            uint256 thash;
+            loop
             {
-                if (result <= hashTarget)
+                thash = pblock->GetHash();
+                if (thash <= hashTarget)
                 {
-                    // Found a solution
-                    pblock->nNonce = nNonceFound;
-                    assert(result == pblock->GetHash());
+
                     if (!pblock->SignBlock(*pwalletMain))
                     {
 //                        strMintWarning = strMintMessage;
                         break;
                     }
-                    strMintWarning = "";
 
+                    // Found a solution
                     SetThreadPriority(THREAD_PRIORITY_NORMAL);
-                    CheckWork(pblock.get(), *pwalletMain, reservekey);
+                    CheckWork(pblock.get(), *pwallet, reservekey);
                     SetThreadPriority(THREAD_PRIORITY_LOWEST);
                     break;
                 }
+                pblock->nNonce += 1;
+                nHashesDone += 1;
+                if ((pblock->nNonce & 0xFF) == 0)
+                    break;
             }
 
             // Meter hashes/sec
@@ -4470,22 +4445,17 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
                         if (GetTime() - nLogTime > 30 * 60)
                         {
                             nLogTime = GetTime();
-                            printf("hashmeter %3d CPUs %6.0f khash/s\n", vnThreadsRunning[THREAD_MINER], dHashesPerSec/1000.0);
+                            printf("hashmeter %6.0f khash/s\n", dHashesPerSec/1000.0);
                         }
                     }
                 }
             }
 
             // Check for stop or if block needs to be rebuilt
-            if (fShutdown)
-                return;
-            if (!fGenerateBitcoins)
-                return;
-            if (fLimitProcessors && vnThreadsRunning[THREAD_MINER] > nLimitProcessors)
-                return;
+            boost::this_thread::interruption_point();
             if (vNodes.empty())
                 break;
-            if (nBlockNonce >= 0xffff0000)
+            if (pblock->nNonce >= 0xffff0000)
                 break;
             if (nTransactionsUpdated != nTransactionsUpdatedLast && GetTime() - nStart > 60)
                 break;
@@ -4493,18 +4463,20 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
                 break;
 
             // Update nTime every few seconds
-            pblock->nTime = max(pindexPrev->GetMedianTimePast()+1, pblock->GetMaxTransactionTime());
-            pblock->nTime = max(pblock->GetBlockTime(), pindexPrev->GetBlockTime() - nMaxClockDrift);
             pblock->UpdateTime(pindexPrev);
             nBlockTime = ByteReverse(pblock->nTime);
-
-            if (pblock->GetBlockTime() >= (int64)pblock->vtx[0].nTime + nMaxClockDrift)
-                break;  // need to update coinbase timestamp
+            if (fTestNet)
+            {
+                // Changing pblock->nTime can change work required on testnet:
+                nBlockBits = ByteReverse(pblock->nBits);
+                hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
+            }
         }
     }
 
-    scrypt_buffer_free(scratchbuf);
+
 }
+
 
 void static ThreadBitcoinMiner(void* parg)
 {
