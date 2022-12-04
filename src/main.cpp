@@ -948,6 +948,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
 		return nSubsidy + nFees;
 	}
+    
 	else if(nHeight > CUTOFF_HEIGHT)
 	{
 		return nMinSubsidy + nFees;
@@ -957,6 +958,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 	const char* cseed = cseed_str.c_str();
 	long seed = hex2long(cseed);
 	nSubsidy += generateMTRandom(seed, 800000) * COIN;
+     
 
 	// Subsidy is cut in half every week or 20160 blocks, which will occur approximately every month
 	nSubsidy >>= (nHeight / 20160); 
