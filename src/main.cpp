@@ -45,8 +45,8 @@ unsigned int nStakeMinAge = 60 * 60 * 24 * 20;	// minimum age for coin age: 20d
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 40;	// stake age of full weight: 40d
 unsigned int nStakeTargetSpacing = 30;			// 30 sec block spacing
 
-int64 nChainStartTime = 1391393673;
-int nCoinbaseMaturity = 30;
+int64 nChainStartTime = 1394379258;
+int nCoinbaseMaturity = 20;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -937,11 +937,11 @@ int generateMTRandom(unsigned int s, int range)
 
 
 static const int64 nMinSubsidy = 1 * COIN;
-static const int CUTOFF_HEIGHT = 100800;	// Height at the end of 5 weeks
+static const int CUTOFF_HEIGHT = 161280;	// Height at the end of 5 weeks
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 100000 * COIN;
+	int64 nSubsidy = 1000 * COIN;
 
 	if(nHeight == 1)
 	{
@@ -957,10 +957,10 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 	std::string cseed_str = prevHash.ToString().substr(14,7);
 	const char* cseed = cseed_str.c_str();
 	long seed = hex2long(cseed);
-	nSubsidy += generateMTRandom(seed, 800000) * COIN;
+	nSubsidy += generateMTRandom(seed, 8000) * COIN;
      
 
-	// Subsidy is cut in half every week or 20160 blocks, which will occur approximately every month
+	// Subsidy is cut in half every week or 10080 blocks, which will occur approximately every month
 	nSubsidy >>= (nHeight / 20160); 
     return nSubsidy + nFees;
 }
@@ -974,12 +974,12 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
-	if(nHeight < YEARLY_BLOCKCOUNT)
+	if(nHeight < 2 * YEARLY_BLOCKCOUNT)
 		nRewardCoinYear = 4 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (2 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 3 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (3 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 2 * MAX_MINT_PROOF_OF_STAKE;
+	else if(nHeight < (4 * YEARLY_BLOCKCOUNT))
+		nRewardCoinYear = 5 * MAX_MINT_PROOF_OF_STAKE;
+	else if(nHeight < (6 * YEARLY_BLOCKCOUNT))
+		nRewardCoinYear = 6 * MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
@@ -2525,10 +2525,10 @@ bool LoadBlockIndex(bool fAllowNew)
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xcd;
-        pchMessageStart[1] = 0xf2;
-        pchMessageStart[2] = 0xc0;
-        pchMessageStart[3] = 0xef;
+        pchMessageStart[0] = 0xed;
+        pchMessageStart[1] = 0xc2;
+        pchMessageStart[2] = 0xd0;
+        pchMessageStart[3] = 0xcf;
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
@@ -2556,7 +2556,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "Feb 2, 2014: The Denver Broncos finally got on the board with a touchdown in the final seconds of the third quarter. But the Seattle Seahawks are dominating the Broncos 36-8";
+        const char* pszTimestamp = "Forget about it kid they are ghosts. In the middle of the night.";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2569,7 +2569,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1391393693;
+        block.nTime    = 1394379258;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 12488421;
 
@@ -2868,7 +2868,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xce, 0xd5, 0xdb, 0xfa };
+unsigned char pchMessageStart[4] = { 0xde, 0xe5, 0xfb, 0x2a };
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
