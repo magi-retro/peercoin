@@ -29,13 +29,14 @@ static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
-static const unsigned int MAX_INV_SZ = 50000;
+static const unsigned int MAX_INV_SZ = 30000;
 static const int64 MIN_TX_FEE = .01 * CENT;
 static const int64 MIN_RELAY_TX_FEE = .01 * CENT;
-static const int64 MAX_MONEY = 750000000 * COIN;			// 70 bil
-static const int64 CIRCULATION_MONEY = MAX_MONEY;
-static const double TAX_PERCENTAGE = 0.01;
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 5% annual interest
+static const int64 MAX_MONEY = 500000000 * COIN;
+static const int64 MAX_MONEY2 = 300000000 * COIN;			// 70 bil
+static const int64 CIRCULATION_MONEY = MAX_MONEY2;
+static const double TAX_PERCENTAGE = 0.0078;
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0.02 * COIN;	// 5% annual interest
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
