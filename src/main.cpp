@@ -941,7 +941,7 @@ static const int CUTOFF_HEIGHT = 10000;	// Height at the end of 5 weeks
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 1000 * COIN;
+	int64 nSubsidy = 30000 * COIN;
 
 	if(nHeight == 1)
 	{
