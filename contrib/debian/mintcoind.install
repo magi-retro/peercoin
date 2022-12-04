@@ -1,2 +1,2 @@
-debian/bin/ghostcoind usr/bin
-src/ghostcoind usr/lib/ghostcoin
+debian/bin/whitecoind usr/bin
+src/whitecoind usr/lib/whitecoin

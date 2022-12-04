@@ -1,6 +1,6 @@
 [Protocol]
-exec=ghostcoin-qt '%u'
-protocol=ghostcoin
+exec=whitecoin-qt '%u'
+protocol=whitecoin
 input=none
 output=none
 helper=true
