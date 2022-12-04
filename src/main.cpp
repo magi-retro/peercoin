@@ -943,25 +943,30 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
 	int64 nSubsidy = 30000 * COIN;
 
+    std::string cseed_str = prevHash.ToString().substr(14,7);
+    const char* cseed = cseed_str.c_str();
+    long seed = hex2long(cseed);
+    int rand = generateMTRandom(seed, 8000);
+    
+
 	if(nHeight == 1)
 	{
 		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
 		return nSubsidy + nFees;
 	}
+    else if(nHeight == 2)
+    {
+        nSubsidy = rand * COIN;
+    }
     
 	else if(nHeight > CUTOFF_HEIGHT)
 	{
 		return nMinSubsidy + nFees;
 	}
 
-	std::string cseed_str = prevHash.ToString().substr(14,7);
-	const char* cseed = cseed_str.c_str();
-	long seed = hex2long(cseed);
-	nSubsidy += generateMTRandom(seed, 8000) * COIN;
+	
      
 
-	// Subsidy is cut in half every week or 10080 blocks, which will occur approximately every month
-	nSubsidy >>= (nHeight / 20160); 
     return nSubsidy + nFees;
 }
 
