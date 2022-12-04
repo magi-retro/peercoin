@@ -1,10 +1,10 @@
 
-Copyright (c) 2013-2014 MintCoin Developers
+Copyright (c) 2013-2014 GhostCoin Developers
 
 
-MintCoin 0.3.0 BETA
+GhostCoin 0.3.0 BETA
 
-Copyright (c) 2013-2014 MintCoin Developers
+Copyright (c) 2013-2014 GhostCoin Developers
 Copyright (c) 2013 NovaCoin Developers
 Copyright (c) 2011-2012 Bitcoin Developers
 Distributed under the MIT/X11 software license, see the accompanying
@@ -16,7 +16,7 @@ cryptographic software written by Eric Young (eay@cryptsoft.com).
 
 Intro
 -----
-MintCoin is a free open source project derived from NovaCoin, with
+GhostCoin is a free open source project derived from NovaCoin, with
 the goal of providing a long-term energy-efficient scrypt-based crypto-currency.
 Built on the foundation of Bitcoin and NovaCoin, innovations such as proof-of-stake
 help further advance the field of crypto-currency.
@@ -25,9 +25,9 @@ Setup
 -----
 After completing windows setup then run windows command line (cmd)
   cd daemon
-  mintcoind
-You would need to create a configuration file mintcoin.conf in the default
-wallet directory. Grant access to mintcoind.exe in anti-virus and firewall
+  ghostcoind
+You would need to create a configuration file ghostcoin.conf in the default
+wallet directory. Grant access to ghostcoind.exe in anti-virus and firewall
 applications if necessary.
 
 The software automatically finds other nodes to connect to.  You can
@@ -40,13 +40,13 @@ Upgrade
 -------
 All you existing coins/transactions should be intact with the upgrade.
 To upgrade first backup wallet
-mintcoind backupwallet <destination_backup_file>
-Then shutdown mintcoind by
-mintcoind stop
-Start up the new mintcoind.
+ghostcoind backupwallet <destination_backup_file>
+Then shutdown ghostcoind by
+ghostcoind stop
+Start up the new ghostcoind.
 
 
-See the documentation/wiki at the MintCoin site:
-  http://mintcoin.cc/
+See the documentation/wiki at the GhostCoin site:
+  http://ghostcoin.cc/
 for help and more information.
 
