@@ -1,2 +1,2 @@
-debian/bin/mintcoind usr/bin
-src/mintcoind usr/lib/mintcoin
+debian/bin/ghostcoind usr/bin
+src/ghostcoind usr/lib/ghostcoin
