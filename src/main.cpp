@@ -2525,10 +2525,10 @@ bool LoadBlockIndex(bool fAllowNew)
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xed;
-        pchMessageStart[1] = 0xc2;
-        pchMessageStart[2] = 0xd0;
-        pchMessageStart[3] = 0xcf;
+        pchMessageStart[0] = 0xea;
+        pchMessageStart[1] = 0xce;
+        pchMessageStart[2] = 0xed;
+        pchMessageStart[3] = 0xcd;
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
@@ -2556,7 +2556,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "Forget about it kid they are ghosts. In the middle of the night.";
+        const char* pszTimestamp = "I get knocked down but I get up again.";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2569,9 +2569,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1394379258;
+        block.nTime    = 1397400948;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 651888;
+        block.nNonce   = 552634;
         if (true  && (block.GetHash() != hashGenesisBlock)) {
 
         // This will figure out a valid hash and Nonce if you're
@@ -2882,7 +2882,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xde, 0xe5, 0xfb, 0x2a };
+unsigned char pchMessageStart[4] = { 0xfe, 0xf5, 0xab, 0xaa };
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
