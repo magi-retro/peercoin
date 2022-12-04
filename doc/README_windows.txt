@@ -32,9 +32,11 @@ applications if necessary.
 
 The software automatically finds other nodes to connect to.  You can
 enable Universal Plug and Play (UPnP) with your router/firewall
-or forward port 14070 (TCP) to your computer so you can receive
-incoming connections.  GhostCoin works without incoming connections,
-but allowing incoming connections helps the GhostCoin network.
+or forward port 
+
+15714 (TCP) to your computer so you can receive
+incoming connections.  Whitecoin works without incoming connections,
+but allowing incoming connections helps the Whitecoin network.
 
 Upgrade
 -------
