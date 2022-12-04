@@ -4,13 +4,13 @@ set -e
 
 umask 077
 
-basedir=~/.ghostcoin
+basedir=~/.whitecoin
 dbfile="$basedir/DB_CONFIG"
-cfgfile="$basedir/ghostcoin.conf"
+cfgfile="$basedir/whitecoin.conf"
 
 [ -e "$basedir" ] || mkdir "$basedir"
 
-# ghostcoin does not clean up DB log files by default
+# whitecoin does not clean up DB log files by default
 [ -e "$dbfile" ] || echo 'set_flags DB_LOG_AUTOREMOVE' > "$dbfile"
 
-exec /usr/lib/ghostcoin/ghostcoin-qt "$@"
+exec /usr/lib/whitecoin/whitecoin-qt "$@"

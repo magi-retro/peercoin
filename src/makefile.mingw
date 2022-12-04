@@ -84,10 +84,10 @@ OBJS= \
     obj/scrypt-x86.o \
     obj/scrypt-x86_64.o
 
-all: ghostcoind.exe
+all: whitecoind.exe
 
-test check: test_ghostcoin.exe FORCE
-	test_ghostcoin.exe
+test check: test_whitecoin.exe FORCE
+	test_whitecoin.exe
 
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
@@ -98,7 +98,7 @@ obj/scrypt-x86.o: scrypt-x86.S
 obj/scrypt-x86_64.o: scrypt-x86_64.S
 	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
 
-ghostcoind.exe: $(OBJS:obj/%=obj/%)
+whitecoind.exe: $(OBJS:obj/%=obj/%)
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -106,11 +106,11 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_ghostcoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_whitecoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 clean:
-	-del /Q ghostcoin test_ghostcoin
+	-del /Q whitecoin test_whitecoin
 	-del /Q obj\*
 	-del /Q obj-test\*
 
