@@ -402,6 +402,8 @@ bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierCheck
 {
     if (fTestNet) return true; // Testnet has no checkpoints
     if (mapStakeModifierCheckpoints.count(nHeight))
+	{
         return nStakeModifierChecksum == mapStakeModifierCheckpoints[nHeight];
+	}
     return true;
 }
