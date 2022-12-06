@@ -25,12 +25,6 @@ namespace Checkpoints
     static MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
         (     0, hashGenesisBlockOfficial )
-        ( 10001, uint256("0x000000010e60f3e2fcac1ed5ec9bc59bb453e98375f63c13fb635960f0c83ec1"))
-        ( 30001, uint256("0x000000002fb0103aefd831bfc04e5faa0046a8f858c673b25cde2e303cb7f1f3"))
-        ( 50001, uint256("0x0000000060a6f49e5a54578b8b4e366cb67b67ff2404eaece9b8a8139d7be965"))
-        ( 70001, uint256("0x000000011915ab590fe4b85cb6657c58786eb31ebc674a8aa5eb6dce1382c779"))
-        (100001, uint256("0x3289eccbec732b0b0ba6cd29057ca18cc566598f29ca9eea36dbc385042c22bb"))
-        (110501, uint256("0x4b3dbc18478245e9d9c3a32645c52d18c014ae2b81588091975e362dd1f4810a"))
 		;
 
     static MapCheckpoints mapCheckpointsTestnet =
@@ -369,7 +363,7 @@ namespace Checkpoints
 }
 
 // ppcoin: sync-checkpoint master key
-const std::string CSyncCheckpoint::strMasterPubKey = "04888a777877739a3e1234777111aaa4fa1808345195edcf2d4671b1cceaaa68b7f2f588a9dfad5753be3cd6b8e9518be439c936e2bad93a25bb6d32300fab41c3";
+const std::string CSyncCheckpoint::strMasterPubKey = "04effee1387ea27177647e08c06fffdc7a222529a91e3e8e24936ea08563f7cc90a9d1885d6d6ffd14fdfec232a5c2b532b6c42119afa9d1e7d270f2e336fbde70";
 
 std::string CSyncCheckpoint::strMasterPrivKey = "";
 
