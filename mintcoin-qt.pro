@@ -8,7 +8,6 @@ CONFIG += no_include_pwd
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 # Change paths if needed, these use the foocoin/deps.git repository locations
 
-
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
