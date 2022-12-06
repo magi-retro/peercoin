@@ -41,11 +41,11 @@ static CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 60 * 60 * 24 * 10;	// minimum age for coin age: 10d
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;	// stake age of full weight: 30d
+unsigned int nStakeMinAge = 60 * 60 * 24 * 20;	// minimum age for coin age: 20d
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 40;	// stake age of full weight: 40d
 unsigned int nStakeTargetSpacing = 30;			// 30 sec block spacing
 
-int64 nChainStartTime = 1386399113;
+int64 nChainStartTime = 1391393673;
 int nCoinbaseMaturity = 30;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -960,7 +960,7 @@ static const int64 nMinSubsidy = 1 * COIN;
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 1024 * COIN;
+	int64 nSubsidy = 100000 * COIN;
 
 	std::string cseed_str = prevHash.ToString().substr(10,7);
 	const char* cseed = cseed_str.c_str();
@@ -1008,7 +1008,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 }
 
 static const int64 nTargetTimespan = 30 * 30;  
-static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
+static const int64 nTargetSpacingWorkMax = 3 * nStakeTargetSpacing; 
 
 //
 // maximum nBits value could possible be required nTime after
@@ -2597,9 +2597,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1386399123;
+        block.nTime    = 1391393693;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 12344321;
+        block.nNonce   = 12488421;
 
         //// debug print
         block.print();
@@ -2820,7 +2820,7 @@ string GetWarnings(string strFor)
 
     // ppcoin: should not enter safe mode for longer invalid chain
     // ppcoin: if sync-checkpoint is too old do not enter safe mode
-    if (Checkpoints::IsSyncCheckpointTooOld(60 * 60 * 24 * 300) && !fTestNet && !IsInitialBlockDownload())
+    if (Checkpoints::IsSyncCheckpointTooOld(60 * 60 * 24 * 365) && !fTestNet && !IsInitialBlockDownload())
     {
         nPriority = 100;
         strStatusBar = "WARNING: Checkpoint is too old. Wait for block chain to download, or notify developers.";
@@ -2896,7 +2896,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xcd, 0xa5, 0xdb, 0xfd };
+unsigned char pchMessageStart[4] = { 0xce, 0xd5, 0xdb, 0xfa };
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
