@@ -935,70 +935,49 @@ int generateMTRandom(unsigned int s, int range)
 }
 
 
-int get9Counts(uint256 hash)
-{
-	int count = 0;
-	std::string str = hash.ToString();
-	const char* cstr = str.c_str();
-
-	char* pc = (char*)cstr;
-	while(*pc != '\0')
-	{
-		if(*pc == '9')
-			++count;
-
-		++pc;
-	}
-
-	return count;
-}
-
-
 
 static const int64 nMinSubsidy = 1 * COIN;
-
+static const int CUTOFF_HEIGHT = 100800;	// Height at the end of 5 weeks
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
 	int64 nSubsidy = 100000 * COIN;
 
-	std::string cseed_str = prevHash.ToString().substr(10,7);
+	if(nHeight == 1)
+	{
+		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
+		return nSubsidy + nFees;
+	}
+	else if(nHeight > CUTOFF_HEIGHT)
+	{
+		return nMinSubsidy + nFees;
+	}
+
+	std::string cseed_str = prevHash.ToString().substr(14,7);
 	const char* cseed = cseed_str.c_str();
 	long seed = hex2long(cseed);
-	nSubsidy += generateMTRandom(seed, 1024) * COIN;
+	nSubsidy += generateMTRandom(seed, 800000) * COIN;
 
-	int count9 = get9Counts(prevHash);
-
-	if(count9 > 8)
-	{
-		nSubsidy *= 64;
-	}
-	else if(count9 > 6)	
-	{
-		nSubsidy *= 8;
-	}
-
-	if(nHeight == 1)
-		nSubsidy = TAX_PERCENTAGE * CIRCULATION_MONEY;
-
-	// Subsidy is cut in half every 259200 blocks, which will occur approximately every month
-	nSubsidy >>= (nHeight / 259200); 
-
-    if (nSubsidy < nMinSubsidy)
-    {
-        nSubsidy = nMinSubsidy;
-    }
-
+	// Subsidy is cut in half every week or 20160 blocks, which will occur approximately every month
+	nSubsidy >>= (nHeight / 20160); 
     return nSubsidy + nFees;
 }
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 // simple algorithm, not depend on the diff
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime)
+const int YEARLY_BLOCKCOUNT = 1051200;	// 365 * 2880
+int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight)
 {
     int64 nRewardCoinYear;
 
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
+
+	if(nHeight < YEARLY_BLOCKCOUNT)
+		nRewardCoinYear = 4 * MAX_MINT_PROOF_OF_STAKE;
+	else if(nHeight < (2 * YEARLY_BLOCKCOUNT))
+		nRewardCoinYear = 3 * MAX_MINT_PROOF_OF_STAKE;
+	else if(nHeight < (3 * YEARLY_BLOCKCOUNT))
+		nRewardCoinYear = 2 * MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
@@ -1078,18 +1057,15 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         return bnTargetLimit.GetCompact(); // second block
 
     int64 nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
-	if(pindexLast->nHeight > GRAIN_SWITCHOVER_BLOCK)
+	if(nActualSpacing < 0)
 	{
-		if(nActualSpacing < 0)
-		{
-			// printf(">> nActualSpacing = %"PRI64d" corrected to 2.\n", nActualSpacing);
-			nActualSpacing = 2;
-		}
-		else if(nActualSpacing > nTargetTimespan)
-		{
-			// printf(">> nActualSpacing = %"PRI64d" corrected to nTargetTimespan (900).\n", nActualSpacing);
-			nActualSpacing = nTargetTimespan;
-		}
+		// printf(">> nActualSpacing = %"PRI64d" corrected to 1.\n", nActualSpacing);
+		nActualSpacing = 1;
+	}
+	else if(nActualSpacing > nTargetTimespan)
+	{
+		// printf(">> nActualSpacing = %"PRI64d" corrected to nTargetTimespan (900).\n", nActualSpacing);
+		nActualSpacing = nTargetTimespan;
 	}
 
     // ppcoin: target change every block
@@ -1097,13 +1073,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
 
-	int64 nTargetSpacingWorkMax0 = nTargetSpacingWorkMax;
-	if(pindexLast->nHeight > GRAIN_SWITCHOVER1_BLOCK)	// from GRAIN_SWITCHOVER1_BLOCK, nTargetSpacingWorkMax0 is set to 3 * nStakeTargetSpacing
-	{
-		nTargetSpacingWorkMax0 = 3 * nStakeTargetSpacing;
-	}
-
-    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax0, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
+    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
     int64 nInterval = nTargetTimespan / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
@@ -1427,7 +1397,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
             if (!GetCoinAge(txdb, nCoinAge))
                 return error("ConnectInputs() : %s unable to get coin age for coinstake", GetHash().ToString().substr(0,10).c_str());
             int64 nStakeReward = GetValueOut() - nValueIn;
-            if (nStakeReward > GetProofOfStakeReward(nCoinAge, pindexBlock->nBits, nTime) - GetMinFee() + MIN_TX_FEE)
+            if (nStakeReward > GetProofOfStakeReward(nCoinAge, pindexBlock->nBits, nTime, pindexBlock->nHeight) - GetMinFee() + MIN_TX_FEE)
                 return DoS(100, error("ConnectInputs() : %s stake reward exceeded", GetHash().ToString().substr(0,10).c_str()));
         }
         else
@@ -2584,7 +2554,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "6 December 2013 Last updated at 01:46 ET: Microsoft disrupts ZeroAccess web fraud botnet";
+        const char* pszTimestamp = "Feb 2, 2014: The Denver Broncos finally got on the board with a touchdown in the final seconds of the third quarter. But the Seattle Seahawks are dominating the Broncos 36-8";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
