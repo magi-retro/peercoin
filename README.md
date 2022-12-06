@@ -1,25 +1,31 @@
 
-Grain (GRA) 
+MintCoin (MNT)
 
-Grain is a PoW/PoS coin that is designed to be the unit of cybercoin. It has a total of 50 billion unit to be released, through a fair p2p mining process. Grain is from the family of PPCoin/Novacoin with latest available algorithms that fixed various problems in the PoW/PoS coins. As compared to the PoW only coins, the proof of stake coins are more resilient to 51% attack. Also it is a long term energy-efficient crypto-currency since not all coins are obtained by mining.
+MintCoin is an innovative, secure and energy efficient PoW/PoS coin. It uses a faster PoW distribution mechanism to distribute the initial coins, then after 5 weeks the coin is basically transferred to a pure PoS coin, where the generation of the coin is mainly through the PoS interests.
 
-Each grain block provides random 1024 - 2048 grains initially. It also provides rare superblocks. The coin uses hash-based algorithm to determine superblocks based on the number of 9s in the previous block hash. It works as follows:
-- the hash contains six 9s or less: regular block
-- the hash contains seven or eight 9s: 8 times the regular block (about 5% chances)
-- the hash contains nine or more 9s: 64 times the regular block (about 1% chances)
+MintCoin also adopt a variable PoS rate, which gives the highest payout at 20% the first year, then decrease 5% per year until the 4th year it reaches annual interest rate of 5%, then it will remain at this rate.
 
-Grain also provides 5% annual interest on the grained held. The interest will be paid about every 2 weeks.
+Because after 5 weeks it is basically a pure PoS coin, it does not need to be intensively mined, as the PoW payout will remain the minimum. Most coins will be generated through PoS, thus it is a coin that will save a lot of energy compared to other coins.
 
-Specifications:
+MintCoin will have a total of 70 billion coins. Initially each block will deliver 100000 to 900000 coins randomly. The PoW payout will be halved each week (7 days). After 5 weeks, the PoW payout will be fixed at 1 coin per block.
+
+PoS will start after at least 20 days of holding of the coins in the wallet. With PoS, the coin is more resilient to 51% attack. 
+
+Other Specifications:
 	- 30 seconds block target
-	- 1024-2048 grains per block for normal blocks
-	- 8 times or 64 times the regular payout per block for super blocks depends on the number of 9s in the previous hash
+	- 100000 - 900000 coins per block initially
+	- PoW payout will be halved every week for the first 5 weeks
+	- After 5 weeks, the PoW payout will be fixed at 1 coin per block
 	- Difficulty retargets every block 
-	- mining payout will be halved every 90 days (259200 blocks)
-	- minimum payout per block 1 coin
-	- Total grains will be 50 billions
-	- 6 confirmations for transaction
+	- PoS variable interests:
+		- 1st year: 20%
+		- 2nd year: 15%
+		- 3rd year: 10%
+		- 4th and subsequent years: 5%
+	- Total coins will be 70 billions
+	- 4 confirmations for transaction, thus fast 2 mins confirmation for transdactions
 	- 50 confirmations for minted blocks
+	- 1% premine for bounties, giveaways, development, support and maintenance, new feature developments etc.
 
 	- Ports: 12788 (connection) and 12789 (RPC)
 
