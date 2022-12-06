@@ -21,5 +21,5 @@ Specifications:
 	- 6 confirmations for transaction
 	- 50 confirmations for minted blocks
 
-	- Ports: 11054 (connection) and 11055 (RPC)
+	- Ports: 12788 (connection) and 12789 (RPC)
 
