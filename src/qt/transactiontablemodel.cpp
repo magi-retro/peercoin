@@ -373,7 +373,17 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     {
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
-        return QIcon(":/icons/tx_mined");
+		{
+			QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+			float dd = str.toFloat();
+
+			if(dd > 16384.0)
+				return QIcon(":/icons/tx_mined3");
+			else if(dd > 2048.0)
+				return QIcon(":/icons/tx_mined2");
+			else
+				return QIcon(":/icons/tx_mined");
+		}
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
         return QIcon(":/icons/tx_input");
