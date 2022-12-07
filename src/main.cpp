@@ -40,11 +40,12 @@ static CBigNum bnProofOfStakeLimit(~uint256(0) >> 24);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 60 * 60 * 24 * 30; // minimum age for coin age
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 90; // stake age of full weight
-unsigned int nStakeTargetSpacing = 1 * 60; // 1-minute block spacing
-int64 nChainStartTime = 1371910049;
-int nCoinbaseMaturity = 5;
+unsigned int nStakeMinAge = 60 * 60 * 24 * 10;	// minimum age for coin age: 10d
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;	// stake age of full weight: 30d
+unsigned int nStakeTargetSpacing = 30;			// 30 sec block spacing
+
+int64 nChainStartTime = 1386399113;
+int nCoinbaseMaturity = 30;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -996,8 +997,8 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
     return nSubsidy;
 }
 
-static const int64 nTargetTimespan = 0.16 * 24 * 60 * 60;  // 4-hour
-static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; // 2-hour
+static const int64 nTargetTimespan = 30 * 30;  
+static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
 
 //
 // maximum nBits value could possible be required nTime after
@@ -1011,7 +1012,7 @@ unsigned int ComputeMaxBits(CBigNum bnTargetLimit, unsigned int nBase, int64 nTi
     {
         // Maximum 200% adjustment per day...
         bnResult *= 2;
-        nTime -= 0.16 * 24 * 60 * 60;
+        nTime -= 24 * 60 * 60;
     }
     if (bnResult > bnTargetLimit)
         bnResult = bnTargetLimit;
@@ -2511,8 +2512,9 @@ bool LoadBlockIndex(bool fAllowNew)
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
-        nStakeMinAge = 2 * 60 * 60; // test net min age is 2 hours
-        nModifierInterval = 20 * 60; // test modifier interval is 20 minutes
+        nStakeMinAge = 20 * 60; // test net min age is 20 min
+        nStakeMaxAge = 60 * 60; // test net min age is 60 min
+		nModifierInterval = 60; // test modifier interval is 2 minutes
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
         nStakeTargetSpacing = 3 * 60; // test block spacing is 3 minutes
     }
@@ -2554,7 +2556,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1371910069;
+        block.nTime    = 1386399123;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 3858650;
 
@@ -2873,7 +2875,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xe4, 0xe8, 0xe9, 0xe5 };
+unsigned char pchMessageStart[4] = { 0xcd, 0xa5, 0xdb, 0xfd };
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
