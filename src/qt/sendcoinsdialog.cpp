@@ -67,7 +67,7 @@ void SendCoinsDialog::on_sendButton_clicked()
 
     if(!model)
         return;
-
+	
     for(int i = 0; i < ui->entries->count(); ++i)
     {
         SendCoinsEntry *entry = qobject_cast<SendCoinsEntry*>(ui->entries->itemAt(i)->widget());
