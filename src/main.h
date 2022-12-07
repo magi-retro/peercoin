@@ -30,17 +30,14 @@ static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
-static const int64 MIN_TX_FEE = 0.1 * CENT;
-static const int64 MIN_RELAY_TX_FEE = 0.1 * CENT;
-static const int64 MAX_MONEY = 47433600 * COIN;
-static const int64 MAX_MINT_PROOF_OF_WORK = 10 * COIN;
-static const int64 MAX_MINT_PROOF_OF_WORK_LEGACY = 10 * COIN;
-static const int64 MAX_MINT_PROOF_OF_STAKE = 1 * CENT;
+static const int64 MIN_TX_FEE = 2 * CENT;
+static const int64 MIN_RELAY_TX_FEE = 2 * CENT;
+static const int64 MAX_MONEY = 50000000000 * COIN;			// 50 bil
+static const int64 CIRCULATION_MONEY = MAX_MONEY;
+static const double TAX_PERCENTAGE = 0.01;
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 5% annual interest
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
-static const unsigned int PROTOCOL_SWITCH_TIME = 1371686400; // 20 Jun 2013 00:00:00
-
-static const unsigned int REWARD_SWITCH_TIME = 1369432800; // 25 May 2013 00:00:00
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -115,7 +112,7 @@ void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& 
 void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash1);
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey);
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
-int64 GetProofOfWorkReward(unsigned int nBits);
+int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash);
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime);
 unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBlockTime);
@@ -458,7 +455,7 @@ public:
         READWRITE(vin);
         READWRITE(vout);
         READWRITE(nLockTime);
-    )
+	)
 
     void SetNull()
     {
@@ -592,7 +589,7 @@ public:
     {
         // Large (in bytes) low-priority (new, small-coin) transactions
         // need a fee.
-        return dPriority > COIN * 120 / 250;
+        return dPriority > COIN * 2880 / 250;
     }
 
     int64 GetMinFee(unsigned int nBlockSize=1, bool fAllowFree=false, enum GetMinFee_mode mode=GMF_BLOCK) const;
@@ -655,7 +652,9 @@ public:
             nVersion,
             vin.size(),
             vout.size(),
-            nLockTime);
+            nLockTime
+			);
+
         for (unsigned int i = 0; i < vin.size(); i++)
             str += "    " + vin[i].ToString() + "\n";
         for (unsigned int i = 0; i < vout.size(); i++)
@@ -929,23 +928,11 @@ public:
     // ppcoin: entropy bit for stake modifier if chosen by modifier
     unsigned int GetStakeEntropyBit(unsigned int nHeight) const
     {
-        // Protocol switch to support p2pool at BottleCaps block #9689
-        if (nHeight >= 9689 || fTestNet)
-        {
-            // Take last bit of block hash as entropy bit
-            unsigned int nEntropyBit = ((GetHash().Get64()) & 1llu);
-            if (fDebug && GetBoolArg("-printstakemodifier"))
-                printf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetHash().ToString().c_str(), nEntropyBit);
-            return nEntropyBit;
-        }
-        // Before BottleCaps block #9689 - old protocol
-        uint160 hashSig = Hash160(vchBlockSig);
+        // Take last bit of block hash as entropy bit
+        unsigned int nEntropyBit = ((GetHash().Get64()) & 1llu);
         if (fDebug && GetBoolArg("-printstakemodifier"))
-            printf("GetStakeEntropyBit: hashSig=%s", hashSig.ToString().c_str());
-        hashSig >>= 159; // take the first bit of the hash
-        if (fDebug && GetBoolArg("-printstakemodifier"))
-            printf(" entropybit=%"PRI64d"\n", hashSig.Get64());
-        return hashSig.Get64();
+            printf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetHash().ToString().c_str(), nEntropyBit);
+        return nEntropyBit;
     }
 
     // ppcoin: two types of block: proof-of-work or proof-of-stake
