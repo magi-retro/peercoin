@@ -66,7 +66,7 @@ map<uint256, map<uint256, CDataStream*> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "BottleCaps Signed Message:\n";
+const string strMessageMagic = "Grain Signed Message:\n";
 
 double dHashesPerSec;
 int64 nHPSTimerStart;
@@ -1514,8 +1514,8 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
-    bool fEnforceBIP30 = true; // Always active in BottleCaps
-    bool fStrictPayToScriptHash = true; // Always active in BottleCaps
+    bool fEnforceBIP30 = true; // Always active in Grain
+    bool fStrictPayToScriptHash = true; // Always active in Grain
 
     //// issue here: it doesn't know the version
     unsigned int nTxPos;
