@@ -32,9 +32,10 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = CENT;
 static const int64 MIN_RELAY_TX_FEE = CENT;
-static const int64 MAX_MONEY = 2000000000 * COIN;
-static const int64 MAX_MINT_PROOF_OF_WORK = 100 * COIN;
-static const int64 MAX_MINT_PROOF_OF_STAKE = 1 * COIN;
+static const int64 MAX_MONEY = 1500000 * COIN;
+static const int64 MAX_MINT_PROOF_OF_WORK = 3 * COIN;
+static const int64 MAX_MINT_PROOF_OF_STAKE = 3 * CENT;
+
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 static const unsigned int PROTOCOL_SWITCH_TIME = 1371686400; // 20 Jun 2013 00:00:00
 

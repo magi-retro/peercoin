@@ -947,11 +947,11 @@ int64 GetProofOfWorkReward(unsigned int nBits)
 
     // BitGem: subsidy is cut in half every 64x multiply of PoW difficulty
     // A reasonably continuous curve is used to avoid shock to market
-    // (nSubsidyLimit / nSubsidy) ** 6 == bnProofOfWorkLimit / bnTarget
+    // (nSubsidyLimit / nSubsidy) ** 4 == bnProofOfWorkLimit / bnTarget
     //
     // Human readable form:
     //
-    // nSubsidy = 100 / (diff ^ 1/6)
+    // nSubsidy = 100 / (diff ^ 1/4)
     CBigNum bnLowerBound = CENT;
     CBigNum bnUpperBound = bnSubsidyLimit;
     while (bnLowerBound + CENT <= bnUpperBound)
@@ -990,11 +990,11 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 
         // BitGem: reward for coin-year is cut in half every 64x multiply of PoS difficulty
         // A reasonably continuous curve is used to avoid shock to market
-        // (nRewardCoinYearLimit / nRewardCoinYear) ** 6 == bnProofOfStakeLimit / bnTarget
+        // (nRewardCoinYearLimit / nRewardCoinYear) ** 4 == bnProofOfStakeLimit / bnTarget
         //
         // Human readable form:
         //
-        // nRewardCoinYear = 1 / (posdiff ^ 1/6)
+        // nRewardCoinYear = 1 / (posdiff ^ 1/4)
 
         CBigNum bnLowerBound = 1 * CENT; // Lower interest bound is 1% per year
         CBigNum bnUpperBound = bnRewardCoinYearLimit;
@@ -1015,7 +1015,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
     else
     {
         // Old creation amount per coin-year, 5% fixed stake mint rate
-        nRewardCoinYear = 5 * CENT;
+        nRewardCoinYear = 0.015 * CENT;
     }
 
     int64 nSubsidy = nCoinAge * 33 / (365 * 33 + 8) * nRewardCoinYear;
@@ -2535,9 +2535,9 @@ bool LoadBlockIndex(bool fAllowNew)
         //   vMerkleTree: 4a5e1e
 
         // Genesis block
-        const char* pszTimestamp = "https://bitcointalk.org/index.php?topic=134179.msg1502196#msg1502196";
+        const char* pszTimestamp = "NYT - 16.05.2013 - I.R.S. Chief Out After Protest Over Scrutiny of Groups";
         CTransaction txNew;
-        txNew.nTime = 1360105017;
+        txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(9999) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -2547,7 +2547,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1360105017;
+        block.nTime    = nChainStartTime + 20;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = !fTestNet ? 1575379 : 46534;
 
