@@ -251,8 +251,8 @@ bool GetMyExternalIP(CNetAddr& ipRet)
 
 void ThreadGetMyExternalIP(void* parg)
 {
-    // Wait for IRC to get it first - disabled with ppcoin
-    if (false && GetBoolArg("-irc", false))
+    // Wait for IRC to get it first
+    if (GetBoolArg("-irc", true))
     {
         for (int i = 0; i < 2 * 60; i++)
         {
@@ -1010,7 +1010,7 @@ void ThreadDNSAddressSeed2(void* parg)
     printf("ThreadDNSAddressSeed started\n");
     int found = 0;
 
-    if (true /*!fTestNet*/)  // ppcoin enables dns seeding with testnet too
+    if (true && !fTestNet)
     {
         printf("Loading addresses from DNS seeds (could take a while)\n");
 
@@ -1609,21 +1609,24 @@ void StartNode(void* parg)
     // Start threads
     //
 
+/*
     if (!GetBoolArg("-dnsseed", true))
         printf("DNS seeding disabled\n");
     else
         if (!CreateThread(ThreadDNSAddressSeed, NULL))
             printf("Error: CreateThread(ThreadDNSAddressSeed) failed\n");
+*/
+
+    if (GetBoolArg("-dnsseed", false))
+        printf("DNS seeding NYI\n");
 
     // Map ports with UPnP
     if (fHaveUPnP)
         MapPort(fUseUPnP);
 
     // Get addresses from IRC and advertise ours
-    // if (!CreateThread(ThreadIRCSeed, NULL))
-    //     printf("Error: CreateThread(ThreadIRCSeed) failed\n");
-    // IRC disabled with ppcoin
-    printf("IRC seeding/communication disabled\n");
+    if (!CreateThread(ThreadIRCSeed, NULL))
+        printf("Error: CreateThread(ThreadIRCSeed) failed\n");
 
     // Send and receive from sockets, accept connections
     if (!CreateThread(ThreadSocketHandler, NULL))
