@@ -4,8 +4,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="14"/>
-        <source>About Bitcoin</source>
-        <translation>О Bitcoin</translation>
+        <source>About NovaCoin</source>
+        <translation>О NovaCoin</translation>
     </message>
     <message>
         <location filename="../forms/aboutdialog.ui" line="53"/>
@@ -294,8 +294,13 @@ Are you sure you wish to encrypt your wallet?</source>
     <name>BitcoinGUI</name>
     <message>
         <location filename="../bitcoingui.cpp" line="69"/>
-        <source>Bitcoin Wallet</source>
-        <translation>Bitcoin-бумажник</translation>
+        <source>NovaCoin Wallet</source>
+        <translation>NovaCoin-бумажник</translation>
+    </message>
+    <message>
+        <location filename="../bitcoingui.cpp" line="243"/>
+        <source>Show/Hide &amp;NovaCoin</source>
+        <translation>Показать/Спрятать бумажник</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="142"/>
