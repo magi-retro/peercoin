@@ -32,10 +32,11 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
-
+uint256 hashGenesisBlock = hashGenesisBlockOfficial;
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimit(~uint256(0) >> 24);
 static CBigNum bnProofOfStakeHardLimit(~uint256(0) >> 30); // disabled temporarily, will be used in the future to fix minimum PoS difficulty at 0.25
+
 
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
@@ -43,8 +44,7 @@ static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 unsigned int nStakeMinAge = 60 * 60 * 24 * 30; // minimum age for coin age
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 90; // stake age of full weight
 unsigned int nStakeTargetSpacing = 10 * 60; // 10-minute block spacing
-unsigned int nModifierInterval = 6 * 60 * 60; // time to elapse before new modifier is computed
-
+int64 nChainStartTime = 1368690376;
 int nCoinbaseMaturity = 500;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -954,19 +954,28 @@ int64 GetProofOfWorkReward(unsigned int nBits)
     // nSubsidy = 100 / (diff ^ 1/4)
     CBigNum bnLowerBound = CENT;
     CBigNum bnUpperBound = bnSubsidyLimit;
-    while (bnLowerBound + CENT <= bnUpperBound)
-    {
-        CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
-        if (fDebug && GetBoolArg("-printcreation"))
-            printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
-        if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
-            bnUpperBound = bnMidValue;
-        else
-            bnLowerBound = bnMidValue;
-    }
+    // Smoother decrease of reward for low difficulty for 
+	int64 nSubsidy; 
+    if (bnTargetLimit / bnTarget < 1) {
+            printf("GetProofOfWorkReward() : Difficulty too low.");
+			nSubsidy= MAX_MINT_PROOF_OF_WORK;
 
-    int64 nSubsidy = bnUpperBound.getuint64();
-    nSubsidy = (nSubsidy / CENT) * CENT;
+    } else {
+
+		while (bnLowerBound + CENT <= bnUpperBound)
+		{
+		    CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
+		    if (fDebug && GetBoolArg("-printcreation"))
+		        printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
+		    if ( bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
+		        bnUpperBound = bnMidValue;
+		    else
+		        bnLowerBound = bnMidValue;
+		}
+
+		int64 nSubsidy = bnUpperBound.getuint64();
+		nSubsidy = (nSubsidy / CENT) * CENT;
+    }
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfWorkReward() : create=%s nBits=0x%08x nSubsidy=%"PRI64d"\n", FormatMoney(nSubsidy).c_str(), nBits, nSubsidy);
 
@@ -1003,7 +1012,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
             CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
             if (fDebug && GetBoolArg("-printcreation"))
                 printf("GetProofOfStakeReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
-            if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnTarget)
+            if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnRewardCoinYearLimit * bnTarget)
                 bnUpperBound = bnMidValue;
             else
                 bnLowerBound = bnMidValue;
@@ -2528,12 +2537,12 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis Block:
-        // CBlock(hash=000000000019d6, ver=1, hashPrevBlock=00000000000000, hashMerkleRoot=4a5e1e, nTime=1231006505, nBits=1d00ffff, nNonce=2083236893, vtx=1)
-        //   CTransaction(hash=4a5e1e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
-        //     CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73)
-        //     CTxOut(nValue=50.00000000, scriptPubKey=0x5F1DF16B2B704C8A578D0B)
-        //   vMerkleTree: 4a5e1e
-
+//CBlock(hash=0000068e0b99f3db472b, ver=1, hashPrevBlock=00000000000000000000, 
+// hashMerkleRoot=ea6fed5e25, nTime=1368496587, nBits=1e0fffff, nNonce=578618, vtx=1, vchBlockSig=)
+//  Coinbase(hash=ea6fed5e25, nTime=1368496567, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+//    CTxIn(COutPoint(0000000000, 4294967295), coinbase 04ffff001d020f2706787878787878)
+//    CTxOut(empty)
+//vMerkleTree: ea6fed5e2
         // Genesis block
         const char* pszTimestamp = "NYT - 16.05.2013 - I.R.S. Chief Out After Protest Over Scrutiny of Groups";
         CTransaction txNew;
@@ -2549,12 +2558,35 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = nChainStartTime + 20;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = !fTestNet ? 1575379 : 46534;
+        block.nNonce   = 1930625;
+
+ 	   if (false  && (block.GetHash() != hashGenesisBlock)) {
+	 
+		// This will figure out a valid hash and Nonce if you're
+		// creating a different genesis block:
+		    uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+		    while (block.GetHash() > hashTarget)
+		       {
+		           ++block.nNonce;
+		           if (block.nNonce == 0)
+		           {
+		               printf("NONCE WRAPPED, incrementing time");
+		               ++block.nTime;
+		           }
+		       }
+        }
+
 
         //// debug print
-        assert(block.hashMerkleRoot == uint256("0x4cb33b3b6a861dcbc685d3e614a9cafb945738d6833f182855679f2fad02057b"));
         block.print();
-        assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
+        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
+        printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
+        printf("block.nTime = %u \n", block.nTime);
+        printf("block.nNonce = %u \n", block.nNonce);
+
+        assert(block.hashMerkleRoot == uint256("0x21d15eaf90c8c67a94665f9b47686ce54dfd7188fe51621125e04220c93b979e"));
+
+        assert(block.GetHash() == hashGenesisBlock);
         assert(block.CheckBlock());
 
         // Start new block file
