@@ -109,6 +109,8 @@ OBJS= \
     obj/init.o \
     obj/irc.o \
     obj/keystore.o \
+    obj/scrypt_mine.o \
+    obj/scrypt-x86.o \
     obj/main.o \
     obj/net.o \
     obj/protocol.o \
@@ -118,7 +120,8 @@ OBJS= \
     obj/util.o \
     obj/wallet.o \
     obj/walletdb.o \
-    obj/noui.o
+    obj/noui.o \
+    obj/pbkdf2.o
 
 all: novacoind.exe
 
