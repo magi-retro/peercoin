@@ -115,6 +115,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/strlcpy.h \
     src/main.h \
     src/net.h \
+    src/scrypt_mine.h \
+    src/pbkdf2.h \
     src/key.h \
     src/db.h \
     src/walletdb.h \
@@ -178,6 +180,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/main.cpp \
     src/init.cpp \
     src/net.cpp \
+    src/scrypt_mine.cpp \
+    src/pbkdf2.cpp \
     src/irc.cpp \
     src/checkpoints.cpp \
     src/addrman.cpp \
@@ -213,6 +217,14 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/protocol.cpp \
     src/qt/notificator.cpp \
     src/qt/qtipcserver.cpp
+
+contains(QMAKE_HOST.arch, x86):{
+    SOURCES += src/scrypt-x86.S
+}
+
+contains(QMAKE_HOST.arch, x86_64):{
+    SOURCES += src/scrypt-x86_64.S
+}
 
 RESOURCES += \
     src/qt/bitcoin.qrc
