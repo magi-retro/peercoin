@@ -937,42 +937,24 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 }
 
 // miner's coin base reward based on nBits
-int64 GetProofOfWorkReward(unsigned int nBits)
+int64 GetProofOfWorkReward(unsigned int nHeight)
 {
-    CBigNum bnSubsidyLimit = MAX_MINT_PROOF_OF_WORK;
-    CBigNum bnTarget;
-    bnTarget.SetCompact(nBits);
-    CBigNum bnTargetLimit = bnProofOfWorkLimit;
-    bnTargetLimit.SetCompact(bnTargetLimit.GetCompact());
+		int64 nSubsidy = 0 * COIN;
 
-    // BitGem: subsidy is cut in half every 64x multiply of PoW difficulty
-    // A reasonably continuous curve is used to avoid shock to market
-    // (nSubsidyLimit / nSubsidy) ** 6 == bnProofOfWorkLimit / bnTarget
-    //
-    // Human readable form:
-    //
-    // nSubsidy = 100 / (diff ^ 1/6)
-    CBigNum bnLowerBound = CENT;
-    CBigNum bnUpperBound = bnSubsidyLimit;
-    while (bnLowerBound + CENT <= bnUpperBound)
-    {
-        CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
-        if (fDebug && GetBoolArg("-printcreation"))
-            printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
-        if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
-            bnUpperBound = bnMidValue;
-        else
-            bnLowerBound = bnMidValue;
-    }
-
-	int64 nSubsidy = bnUpperBound.getuint64();
-	// nSubsidy = (nSubsidy / CENT) * CENT;
-
-
-    if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfWorkReward() : create=%s nBits=0x%08x nSubsidy=%"PRI64d"\n", FormatMoney(nSubsidy).c_str(), nBits, nSubsidy);
-
-    return min(nSubsidy, MAX_MINT_PROOF_OF_WORK);
+	    if(nHeight < 240)   
+			nSubsidy = 1 * COIN;
+		else if(nHeight < 480)
+			nSubsidy = 2 * COIN;
+		else if(nHeight < 720)
+			nSubsidy = 3 * COIN;
+		else if(nHeight < 960)
+			nSubsidy = 4 * COIN;
+		else if(nHeight < 1200)
+			nSubsidy = 5 * COIN;
+		else 
+			nSubsidy = 10 * COIN;			
+			
+    return nSubsidy;
 }
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
@@ -2589,7 +2571,7 @@ bool LoadBlockIndex(bool fAllowNew)
         assert(block.hashMerkleRoot == uint256("0x42eda43959f2726e4ea033cab3af3c86d04cee4d5e736760387ba7dae87093ac"));
 
         assert(block.GetHash() == hashGenesisBlock);
-        assert(block.CheckBlock());
+
 
         // Start new block file
         unsigned int nFile;
