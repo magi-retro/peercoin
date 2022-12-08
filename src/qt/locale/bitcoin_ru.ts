@@ -446,12 +446,12 @@ Are you sure you wish to encrypt your wallet?</source>
     <message>
         <location filename="../bitcoingui.cpp" line="246"/>
         <source>&amp;Backup Wallet</source>
-        <translation type="unfinished"/>
+        <translation>Скопировать кошелек</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="247"/>
         <source>Backup wallet to another location</source>
-        <translation type="unfinished"/>
+        <translation>Скопировать кошелек в другое место</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="248"/>
@@ -594,7 +594,7 @@ Address: %4
     <message>
         <location filename="../bitcoingui.cpp" line="782"/>
         <source>Backup Wallet</source>
-        <translation type="unfinished"/>
+        <translation>Скопировать кошелек</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="782"/>
@@ -796,12 +796,12 @@ Address: %4
     <message>
         <location filename="../forms/messagepage.ui" line="20"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation type="unfinished"/>
+        <translation>Вы можете подписать сообщение ключом от своего адреса, чтобы доказать владенгие им. Будьте осторожны и не подписывайте текст, не относящийся лично к вам. ПОдписывайте только текст, с которым вы полностью согласны и который можете однозначно интерпретировать.</translation>
     </message>
     <message>
         <location filename="../forms/messagepage.ui" line="38"/>
-        <source>The address to send the payment to  (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Адрес получателя платежа (например 1LA5FtQhnnWnkK6zjFfutR7Stiit4wKd63)</translation>
+        <source>The address to send the payment to  (e.g. 4Zo1ga6xuKuQ7JV7M9rGDoxdbYwV5zgQJ5)</source>
+        <translation>Адрес получателя платежа (например 4Zo1ga6xuKuQ7JV7M9rGDoxdbYwV5zgQJ5)</translation>
     </message>
     <message>
         <location filename="../forms/messagepage.ui" line="48"/>
@@ -903,8 +903,18 @@ Address: %4
     </message>
     <message>
         <location filename="../forms/overviewpage.ui" line="40"/>
+        <source>Wallet</source>
+        <translation>Бумажник</translation>
+    </message>
+    <message>
+        <location filename="../forms/overviewpage.ui" line="40"/>
         <source>Balance:</source>
         <translation>Баланс:</translation>
+    </message>
+    <message>
+        <location filename="../forms/overviewpage.ui" line="40"/>
+        <source>Stake:</source>
+        <translation>Доля:</translation>
     </message>
     <message>
         <location filename="../forms/overviewpage.ui" line="47"/>
@@ -1158,8 +1168,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/sendcoinsentry.ui" line="93"/>
-        <source>The address to send the payment to  (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Адрес получателя платежа (например 1LA5FtQhnnWnkK6zjFfutR7Stiit4wKd63)</translation>
+        <source>The address to send the payment to  (e.g. 4Zo1ga6xuKuQ7JV7M9rGDoxdbYwV5zgQJ5)</source>
+        <translation>Адрес получателя платежа (например 4Zo1ga6xuKuQ7JV7M9rGDoxdbYwV5zgQJ5)</translation>
     </message>
     <message>
         <location filename="../forms/sendcoinsentry.ui" line="103"/>
