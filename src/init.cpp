@@ -197,7 +197,7 @@ bool AppInit2(int argc, char* argv[])
             "  -timeout=<n>     \t  "   + _("Specify connection timeout (in milliseconds)") + "\n" +
             "  -proxy=<ip:port> \t  "   + _("Connect through socks4 proxy") + "\n" +
             "  -dns             \t  "   + _("Allow DNS lookups for addnode and connect") + "\n" +
-            "  -port=<port>     \t\t  " + _("Listen for connections on <port> (default: 9901 or testnet: 9903)") + "\n" +
+            "  -port=<port>     \t\t  " + _("Listen for connections on <port> (default: 7777 or testnet: 17777)") + "\n" +
             "  -maxconnections=<n>\t  " + _("Maintain at most <n> connections to peers (default: 125)") + "\n" +
             "  -addnode=<ip>    \t  "   + _("Add a node to connect to and attempt to keep the connection open") + "\n" +
             "  -connect=<ip>    \t\t  " + _("Connect only to the specified node") + "\n" +
