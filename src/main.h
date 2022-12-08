@@ -55,11 +55,6 @@ static const int64 nMaxClockDrift = 2 * 60 * 60;        // two hours
 
 extern CScript COINBASE_FLAGS;
 
-
-
-
-
-
 extern CCriticalSection cs_main;
 extern std::map<uint256, CBlockIndex*> mapBlockIndex;
 extern std::set<std::pair<COutPoint, unsigned int> > setStakeSeen;
@@ -86,9 +81,6 @@ extern std::map<uint256, CBlock*> mapOrphanBlocks;
 
 // Settings
 extern int64 nTransactionFee;
-
-
-
 
 
 class CReserveKey;
