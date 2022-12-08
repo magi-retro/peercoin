@@ -1,4 +1,4 @@
-// Copyright (c) 2013 BitGem Developers
+// Copyright (c) 2013 BottleCaps Developers
 
 #include <string.h>
 #include "pbkdf2.h"

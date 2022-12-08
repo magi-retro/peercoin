@@ -1,4 +1,4 @@
-// Copyright (c) 2013 BitGem Developers
+// Copyright (c) 2013 BottleCaps Developers
 
 #ifndef PBKDF2_H
 #define PBKDF2_H
