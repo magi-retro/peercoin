@@ -1532,8 +1532,8 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
-    bool fEnforceBIP30 = true; // Always active in BitGem
-    bool fStrictPayToScriptHash = true; // Always active in BitGem
+    bool fEnforceBIP30 = true; // Always active in BottleCaps
+    bool fStrictPayToScriptHash = true; // Always active in BottleCaps
 
     //// issue here: it doesn't know the version
     unsigned int nTxPos;
