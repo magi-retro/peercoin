@@ -10,6 +10,7 @@
 #include "bignum.h"
 #include "net.h"
 #include "script.h"
+#include "scrypt_mine.h"
 
 #ifdef WIN32
 #include <io.h> /* for _commit */
@@ -82,6 +83,9 @@ extern std::map<uint256, CBlock*> mapOrphanBlocks;
 // Settings
 extern int64 nTransactionFee;
 
+extern bool fGenerateBitcoins;
+extern bool fLimitProcessors;
+extern int nLimitProcessors;
 
 class CReserveKey;
 class CTxDB;
@@ -920,7 +924,7 @@ public:
 
     void SetNull()
     {
-        nVersion = 1;
+        nVersion = 2;
         hashPrevBlock = 0;
         hashMerkleRoot = 0;
         nTime = 0;
@@ -939,7 +943,14 @@ public:
 
     uint256 GetHash() const
     {
-        return Hash(BEGIN(nVersion), END(nNonce));
+        uint256 thash;
+        void * scratchbuff = scrypt_buffer_alloc();
+
+        scrypt_hash(CVOIDBEGIN(nVersion), sizeof(block_header), UINTBEGIN(thash), scratchbuff);
+
+        scrypt_buffer_free(scratchbuff);
+
+        return thash;
     }
 
     int64 GetBlockTime() const

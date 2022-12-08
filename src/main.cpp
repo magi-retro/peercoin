@@ -846,7 +846,7 @@ int64 GetProofOfWorkReward(unsigned int nBits)
         CBigNum bnMidValue = (bnLowerBound + bnUpperBound) / 2;
         if (fDebug && GetBoolArg("-printcreation"))
             printf("GetProofOfWorkReward() : lower=%"PRI64d" upper=%"PRI64d" mid=%"PRI64d"\n", bnLowerBound.getuint64(), bnUpperBound.getuint64(), bnMidValue.getuint64());
-        if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
+        if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit > bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget)
             bnUpperBound = bnMidValue;
         else
             bnLowerBound = bnMidValue;
@@ -1351,17 +1351,15 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex)
     // already refuses previously-known transaction id's entirely.
     // This rule applies to all blocks whose timestamp is after March 15, 2012, 0:00 UTC.
     // On testnet it is enabled as of februari 20, 2012, 0:00 UTC.
-    if (pindex->nTime > 1331769600 || (fTestNet && pindex->nTime > 1329696000))
+
+    BOOST_FOREACH(CTransaction& tx, vtx)
     {
-        BOOST_FOREACH(CTransaction& tx, vtx)
+        CTxIndex txindexOld;
+        if (txdb.ReadTxIndex(tx.GetHash(), txindexOld))
         {
-            CTxIndex txindexOld;
-            if (txdb.ReadTxIndex(tx.GetHash(), txindexOld))
-            {
-                BOOST_FOREACH(CDiskTxPos &pos, txindexOld.vSpent)
-                    if (pos.IsNull())
-                        return false;
-            }
+            BOOST_FOREACH(CDiskTxPos &pos, txindexOld.vSpent)
+                if (pos.IsNull())
+                    return false;
         }
     }
 
@@ -1987,6 +1985,14 @@ bool CBlock::AcceptBlock()
     if (!Checkpoints::CheckSync(hash, pindexPrev))
         return error("AcceptBlock() : rejected by synchronized checkpoint");
 
+    if(nHeight > 0)
+    {
+        CScript expect = CScript() << nHeight;
+
+        if (!std::equal(expect.begin(), expect.end(), vtx[0].vin[0].scriptSig.begin()))
+            return DoS(100, error("AcceptBlock() : block height mismatch in coinbase"));
+    }
+
     // Write block to history file
     if (!CheckDiskSpace(::GetSerializeSize(*this, SER_DISK, CLIENT_VERSION)))
         return error("AcceptBlock() : out of disk space");
@@ -2241,10 +2247,8 @@ bool LoadBlockIndex(bool fAllowNew)
     if (fTestNet)
     {
         hashGenesisBlock = hashGenesisBlockTestNet;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 28);
         nStakeMinAge = 60 * 60 * 24; // test net min age is 1 day
         nCoinbaseMaturity = 60;
-        bnInitialHashTarget = CBigNum(~uint256(0) >> 29);
     }
 
     printf("%s Network: genesis=0x%s nBitsLimit=0x%08x nBitsInitial=0x%08x nStakeMinAge=%d nCoinbaseMaturity=%d\n",
@@ -2288,13 +2292,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = 1360105017;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 2179302059;
-
-        if (fTestNet)
-        {
-            block.nTime    = 1345090000;
-            block.nNonce   = 122894938;
-        }
+        block.nNonce   = 1575379;
 
         //// debug print
         printf("%s\n", block.GetHash().ToString().c_str());
@@ -3776,7 +3774,10 @@ void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& 
         hashPrevBlock = pblock->hashPrevBlock;
     }
     ++nExtraNonce;
-    pblock->vtx[0].vin[0].scriptSig = (CScript() << pblock->nTime << CBigNum(nExtraNonce)) + COINBASE_FLAGS;
+
+    unsigned int nHeight = pindexPrev->nHeight+1; // Height first in coinbase required for block.version=2
+    pblock->vtx[0].vin[0].scriptSig = (CScript() << nHeight << CBigNum(nExtraNonce)) + COINBASE_FLAGS;
+
     assert(pblock->vtx[0].vin[0].scriptSig.size() <= 100);
 
     pblock->hashMerkleRoot = pblock->BuildMerkleTree();
@@ -3875,6 +3876,8 @@ int nLimitProcessors = -1;
 
 void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
 {
+    void *scratchbuf = scrypt_buffer_alloc();
+
     printf("CPUMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
@@ -3955,8 +3958,11 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
         //
         int64 nStart = GetTime();
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
-        uint256 hashbuf[2];
-        uint256& hash = *alignup<16>(hashbuf);
+
+        unsigned int max_nonce = 0xffff0000;
+        block_header res_header;
+        uint256 result;
+
         loop
         {
             unsigned int nHashesDone = 0;
@@ -3974,14 +3980,11 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
             // Check if something found
             if (nNonceFound != (unsigned int) -1)
             {
-                for (unsigned int i = 0; i < sizeof(hash)/4; i++)
-                    ((unsigned int*)&hash)[i] = ByteReverse(((unsigned int*)&hash)[i]);
-
-                if (hash <= hashTarget)
+                if (result <= hashTarget)
                 {
                     // Found a solution
-                    pblock->nNonce = ByteReverse(nNonceFound);
-                    assert(hash == pblock->GetHash());
+                    pblock->nNonce = nNonceFound;
+                    assert(result == pblock->GetHash());
                     if (!pblock->SignBlock(*pwalletMain))
                     {
                         strMintWarning = strMintMessage;
@@ -4050,6 +4053,8 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
                 break;  // need to update coinbase timestamp
         }
     }
+
+    scrypt_buffer_free(scratchbuf);
 }
 
 void static ThreadBitcoinMiner(void* parg)
