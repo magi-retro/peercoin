@@ -1,19 +1,19 @@
-.TH WHITECOIND "7" "April 2013" "x11coind 3.19" 
+.TH WHITECOIND "7" "April 2013" "magid 3.19" 
 .SH NAME
-x11coind \- peer-to-peer network based digital currency
+magid \- peer-to-peer network based digital currency
 .SH SYNOPSIS
-x11coin [options] <command> [params]  
+magi [options] <command> [params]  
 .TP
-x11coin [options] help <command> - Get help for a command
+magi [options] help <command> - Get help for a command
 .SH DESCRIPTION
-This  manual page documents the x11coind program. X11Coin is a peer-to-peer digital currency. Peer-to-peer (P2P) means that there is no central authority to issue new money or keep track of transactions. Instead, these tasks are managed collectively by the nodes of the network. Advantages:
+This  manual page documents the magid program. Magi is a peer-to-peer digital currency. Peer-to-peer (P2P) means that there is no central authority to issue new money or keep track of transactions. Instead, these tasks are managed collectively by the nodes of the network. Advantages:
 
 XC can be sent easily through the Internet, without having to trust middlemen. Transactions are designed to be irreversible. Be safe from instability caused by fractional reserve banking and central banks. The limited inflation of the X11Coin system’s money supply is distributed evenly (by CPU power) throughout the network, not monopolized by banks.
 
 .SH OPTIONS
 .TP
 \fB\-conf=\fR<file>
-Specify configuration file (default: x11coin.conf)
+Specify configuration file (default: magi.conf)
 .TP
 \fB\-gen\fR
 Generate coins
@@ -84,14 +84,14 @@ This help message
 \fBbackupwallet 'destination'\fR
 Safely copies *wallet.dat* to 'destination', which can be a directory or a path with filename.
 .TP
-\fBgetaccount 'x11coinaddress'\fR
+\fBgetaccount 'magiaddress'\fR
 Returns the account associated with the given address.
 .TP
-\fBsetaccount 'x11coinaddress' ['account']\fR
+\fBsetaccount 'magiaddress' ['account']\fR
 Sets the ['account'] associated with the given address. ['account'] may be omitted to remove an address from ['account'].
 .TP
 \fBgetaccountaddress 'account'\fR
-Returns a new x11coin address for 'account'.
+Returns a new magi address for 'account'.
 .TP
 \fBgetaddressesbyaccount 'account'\fR
 Returns the list of addresses associated with the given 'account'.
@@ -112,7 +112,7 @@ Returns the number of connections to other nodes.
 Returns the proof-of-work difficulty as a multiple of the minimum difficulty.
 .TP
 \fBgetgenerate\fR
-Returns boolean true if server is trying to generate x11coins, false otherwise.
+Returns boolean true if server is trying to generate magis, false otherwise.
 .TP
 \fBsetgenerate 'generate' ['genproclimit']\fR
 Generation is limited to ['genproclimit'] processors, -1 is unlimited.
@@ -124,13 +124,13 @@ Returns a recent hashes per second performance measurement while generating.
 Returns an object containing server information.
 .TP
 \fBgetnewaddress 'account'\fR
-Returns a new x11coin address for receiving payments. If 'account' is specified (recommended), it is added to the address book so payments received with the address will be credited to 'account'.
+Returns a new magi address for receiving payments. If 'account' is specified (recommended), it is added to the address book so payments received with the address will be credited to 'account'.
 .TP
 \fBgetreceivedbyaccount 'account' ['minconf=1']\fR
 Returns the total amount received by addresses associated with 'account' in transactions with at least ['minconf'] confirmations.
 .TP
-\fBgetreceivedbyaddress 'x11coinaddress' ['minconf=1']\fR
-Returns the total amount received by 'x11coinaddress' in transactions with at least ['minconf'] confirmations.
+\fBgetreceivedbyaddress 'magiaddress' ['minconf=1']\fR
+Returns the total amount received by 'magiaddress' in transactions with at least ['minconf'] confirmations.
 .TP
 \fBgettransaction 'txid'\fR
 Returns information about a specific transaction, given hexadecimal transaction ID.
@@ -179,26 +179,26 @@ Returns a list of the last ['count'] transactions for 'account' - for all accoun
 \fBmove <'fromaccount'> <'toaccount'> <'amount'> ['minconf=1'] ['comment']\fR
 Moves funds between accounts.
 .TP
-\fBsendfrom* <'account'> <'x11coinaddress'> <'amount'> ['minconf=1'] ['comment'] ['comment-to']\fR
-Sends amount from account's balance to 'x11coinaddress'. This method will fail if there is less than amount x11coins with ['minconf'] confirmations in the account's balance (unless account is the empty-string-named default account; it behaves like the *sendtoaddress* method). Returns transaction ID on success.
+\fBsendfrom* <'account'> <'magiaddress'> <'amount'> ['minconf=1'] ['comment'] ['comment-to']\fR
+Sends amount from account's balance to 'magiaddress'. This method will fail if there is less than amount magis with ['minconf'] confirmations in the account's balance (unless account is the empty-string-named default account; it behaves like the *sendtoaddress* method). Returns transaction ID on success.
 .TP     
-\fBsendtoaddress 'x11coinaddress' 'amount' ['comment'] ['comment-to']\fR
-Sends amount from the server's available balance to 'x11coinaddress'. amount is a real and is rounded to the nearest 0.01. Returns transaction id on success.
+\fBsendtoaddress 'magiaddress' 'amount' ['comment'] ['comment-to']\fR
+Sends amount from the server's available balance to 'magiaddress'. amount is a real and is rounded to the nearest 0.01. Returns transaction id on success.
 .TP    
 \fBstop\fR
-Stops the x11coin server.
+Stops the magi server.
 .TP    
-\fBvalidateaddress 'x11coinaddress'\fR
-Checks that 'x11coinaddress' looks like a proper x11coin address. Returns an object containing:
+\fBvalidateaddress 'magiaddress'\fR
+Checks that 'magiaddress' looks like a proper magi address. Returns an object containing:
 
     "isvalid" : true or false.
     "ismine"  : true if the address is in the server's wallet.
-    "address" : x11coinaddress.
+    "address" : magiaddress.
 
     *note: ismine and address are only returned if the address is valid.
 
 .SH "SEE ALSO"
-x11coin.conf(5)
+magi.conf(5)
 .SH AUTHOR
 This manual page was written by Micah Anderson <micah@debian.org> for the Debian system (but may be used by others). Permission is granted to copy, distribute and/or modify this document under the terms of the GNU General Public License, Version 3 or any later version published by the Free Software Foundation.
 

@@ -1,6 +1,6 @@
 [Protocol]
-exec=x11coin-qt '%u'
-protocol=x11coin
+exec=magi-qt '%u'
+protocol=magi
 input=none
 output=none
 helper=true

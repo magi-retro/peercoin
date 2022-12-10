@@ -1,2 +1,2 @@
-debian/bin/x11coind usr/bin
-src/x11coind usr/lib/x11coin
+debian/bin/magid usr/bin
+src/magid usr/lib/magi
