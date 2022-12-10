@@ -270,9 +270,6 @@
      </item>
      <item>
       <layout class="QFormLayout" name="formLayoutCoinControl4">
-       <property name="fieldGrowthPolicy">
-        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-       </property>
        <property name="horizontalSpacing">
         <number>10</number>
        </property>
@@ -382,7 +379,7 @@
         <height>41</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0">
        <property name="spacing">
         <number>14</number>
        </property>
