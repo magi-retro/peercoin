@@ -364,9 +364,6 @@ WalletModel::UnlockContext WalletModel::requestUnlock()
           setWalletLocked(true);
           was_locked = getEncryptionStatus() == Locked;
       }
- 	
- 	
-    
     
     if(was_locked)
     {
