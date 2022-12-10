@@ -54,7 +54,10 @@
 #include <QDesktopServices>
 #include <QTimer>
 #include <QDragEnterEvent>
+#if QT_VERSION < 0x050000
 #include <QUrl>
+#endif
+#include <QMimeData>
 #include <QStyle>
 
 #include <iostream>
@@ -150,6 +153,15 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelBlocksIcon);
     frameBlocksLayout->addStretch();
+
+    labelEncryptionIcon->setObjectName("labelEncryptionIcon");
+    labelConnectionsIcon->setObjectName("labelConnectionsIcon");
+    labelBlocksIcon->setObjectName("labelBlocksIcon");
+    labelMintingIcon->setObjectName("labelMintingIcon");
+    labelEncryptionIcon->setStyleSheet("#labelEncryptionIcon QToolTip {color:#cecece;background-color:#333333;border:0px;}");
+    labelConnectionsIcon->setStyleSheet("#labelConnectionsIcon QToolTip {color:#cecece;background-color:#333333;border:0px;}");
+    labelBlocksIcon->setStyleSheet("#labelBlocksIcon QToolTip {color:#cecece;background-color:#333333;border:0px;}");
+    labelMintingIcon->setStyleSheet("#labelMintingIcon QToolTip {color:#cecece;background-color:#333333;border:0px;}");
 
     // Set minting pixmap
     labelMintingIcon->setPixmap(QIcon(":/icons/minting").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
@@ -871,7 +883,11 @@ void BitcoinGUI::encryptWallet(bool status)
 
 void BitcoinGUI::backupWallet()
 {
+#if QT_VERSION < 0x050000
     QString saveDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+#else
+    QString saveDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+#endif
     QString filename = QFileDialog::getSaveFileName(this, tr("Backup Wallet"), saveDir, tr("Wallet Data (*.dat)"));
     if(!filename.isEmpty()) {
         if(!walletModel->backupWallet(filename)) {
@@ -1006,7 +1022,7 @@ void BitcoinGUI::updateMintingWeights()
         nWeight = 0;
 
         if (pwalletMain)
-            pwalletMain->GetStakeWeight(*pwalletMain, nMinMax, nMinMax, nWeight);
+            pwalletMain->GetStakeWeight(nMinMax, nMinMax, nWeight);
 
         nNetworkWeight = GetPoSKernelPS();
     }
