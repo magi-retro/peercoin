@@ -738,7 +738,7 @@
           <string notr="true">#label { color: #464747; }</string>
          </property>
          <property name="text">
-          <string>123.456 XC</string>
+          <string>123.456 XMG</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
