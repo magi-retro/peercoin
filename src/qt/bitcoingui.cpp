@@ -833,7 +833,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
         labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-        labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
+        labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>."));
         encryptWalletAction->setChecked(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         changePassphraseAction->setEnabled(true);
@@ -845,7 +845,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
     case WalletModel::Locked:
         labelEncryptionIcon->show();
         labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-        labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
+        labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>."));
         encryptWalletAction->setChecked(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         changePassphraseAction->setEnabled(true);
@@ -947,22 +947,22 @@ void BitcoinGUI::updateMintingIcon()
 {
     if (pwalletMain && pwalletMain->IsLocked())
     {
-        labelMintingIcon->setToolTip(tr("Not minting because wallet is locked."));
+        labelMintingIcon->setToolTip(tr("Not staking because wallet is locked."));
         labelMintingIcon->setEnabled(false);
     }
     else if (vNodes.empty())
     {
-        labelMintingIcon->setToolTip(tr("Not minting because wallet is offline."));
+        labelMintingIcon->setToolTip(tr("Not staking because wallet is offline."));
         labelMintingIcon->setEnabled(false);
     }
     else if (IsInitialBlockDownload())
     {
-        labelMintingIcon->setToolTip(tr("Not minting because wallet is syncing."));
+        labelMintingIcon->setToolTip(tr("Not staking because wallet is syncing."));
         labelMintingIcon->setEnabled(false);
     }
     else if (!nWeight)
     {
-        labelMintingIcon->setToolTip(tr("Not minting because you don't have mature coins."));
+        labelMintingIcon->setToolTip(tr("Not staking because you don't have mature coins."));
         labelMintingIcon->setEnabled(false);
     }
     else if (nLastCoinStakeSearchInterval)
