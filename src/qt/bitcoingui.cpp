@@ -988,11 +988,11 @@ void BitcoinGUI::updateMintingIcon()
         }
 
         labelMintingIcon->setEnabled(true);
-        labelMintingIcon->setToolTip(tr("Minting.<br>Your weight is %1.<br>Network weight is %2.<br>Expected time to earn reward is %3.").arg(nWeight).arg(nNetworkWeight).arg(text));
+        labelMintingIcon->setToolTip(tr("Staking.<br>Your weight is %1.<br>Network weight is %2.<br>Expected time to earn reward is %3.").arg(nWeight).arg(nNetworkWeight).arg(text));
     }
     else
     {
-        labelMintingIcon->setToolTip(tr("Not minting."));
+        labelMintingIcon->setToolTip(tr("Not staking."));
         labelMintingIcon->setEnabled(false);
     }
 }
