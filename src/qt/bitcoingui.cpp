@@ -154,7 +154,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     // Set minting pixmap
     labelMintingIcon->setPixmap(QIcon(":/icons/minting").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
     labelMintingIcon->setEnabled(false);
-    // Add timer to update minting info
+    // Add timer to update minting icon
     QTimer *timerMintingIcon = new QTimer(labelMintingIcon);
     timerMintingIcon->start(MODEL_UPDATE_DELAY);
     connect(timerMintingIcon, SIGNAL(timeout()), this, SLOT(updateMintingIcon()));
