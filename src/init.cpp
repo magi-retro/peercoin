@@ -713,6 +713,7 @@ bool AppInit2()
         return false;
     }
 
+    
     // ********************************************************* Step 8: load wallet
 
     uiInterface.InitMessage(_("Loading wallet..."));
