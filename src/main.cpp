@@ -14,8 +14,6 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
 
 using namespace std;
 using namespace boost;
@@ -927,13 +925,6 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
-
-int generateMTRandom(unsigned int s, int range)
-{
-	random::mt19937 gen(s);
-    random::uniform_int_distribution<> dist(0, range);
-    return dist(gen);
-}
 
 
 
