@@ -7,7 +7,7 @@ SetCompressor /SOLID lzma
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 1.0.0.1
 !define COMPANY "Magi project"
-!define URL http://
+!define URL http://www.cryptomagic.com
 
 # MUI Symbol Definitions
 !define MUI_ICON "../share/pixmaps/Magi.ico"
