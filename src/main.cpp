@@ -7,7 +7,7 @@
 #include "checkpoints.h"
 #include "db.h"
 #include "net.h"
-#include "init.h" 
+#include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
 #include "scrypt_mine.h"
@@ -27,7 +27,7 @@ using namespace boost;
 
 
 CCriticalSection cs_setpwalletRegistered;
-set<CWallet*> setpwalletRegistered; 
+set<CWallet*> setpwalletRegistered;
 
 CCriticalSection cs_main;
 
@@ -1063,10 +1063,10 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     bnNew /= ((nInterval + 1) * nTargetSpacing);
 	
 	/*
-	printf(">> Height = %d, fProofOfStake = %d, nInterval = %"PRI64d", nTargetSpacing = %"PRI64d", nActualSpacing = %"PRI64d"\n", 
-		pindexPrev->nHeight, fProofOfStake, nInterval, nTargetSpacing, nActualSpacing);  
-	printf(">> pindexPrev->GetBlockTime() = %"PRI64d", pindexPrev->nHeight = %d, pindexPrevPrev->GetBlockTime() = %"PRI64d", pindexPrevPrev->nHeight = %d\n", 
-		pindexPrev->GetBlockTime(), pindexPrev->nHeight, pindexPrevPrev->GetBlockTime(), pindexPrevPrev->nHeight);  
+	printf(">> Height = %d, fProofOfStake = %d, nInterval = %"PRI64d", nTargetSpacing = %"PRI64d", nActualSpacing = %"PRI64d"\n",
+		pindexPrev->nHeight, fProofOfStake, nInterval, nTargetSpacing, nActualSpacing);
+	printf(">> pindexPrev->GetBlockTime() = %"PRI64d", pindexPrev->nHeight = %d, pindexPrevPrev->GetBlockTime() = %"PRI64d", pindexPrevPrev->nHeight = %d\n",
+		pindexPrev->GetBlockTime(), pindexPrev->nHeight, pindexPrevPrev->GetBlockTime(), pindexPrevPrev->nHeight);
 	*/
 
     if (bnNew > bnTargetLimit)
@@ -1858,7 +1858,7 @@ bool CBlock::SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew)
 // ppcoin: total coin age spent in transaction, in the unit of coin-days.
 // Only those coins meeting minimum age requirement counts. As those
 // transactions not in main chain are not currently indexed so we
-// might not find out about their coin age. Older transactions are 
+// might not find out about their coin age. Older transactions are
 // guaranteed to be in main chain by sync-checkpoint. This rule is
 // introduced to help nodes establish a consistent view of the coin
 // age (trust score) of competing branches.
@@ -2184,7 +2184,7 @@ CBigNum CBlockIndex::GetBlockTrust() const
         CBigNum bnPoWTrust = (bnProofOfWorkLimit / (bnTarget+1));
         return bnPoWTrust > 1 ? bnPoWTrust : 1;
     }
-} 
+}
 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
@@ -3173,7 +3173,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                     if (inv.hash == pfrom->hashContinue)
                     {
                         // ppcoin: send latest proof-of-work block to allow the
-                        // download node to accept as orphan (proof-of-stake 
+                        // download node to accept as orphan (proof-of-stake
                         // block might be rejected by stake connection check)
                         vector<CInv> vInv;
                         vInv.push_back(CInv(MSG_BLOCK, GetLastBlockIndex(pindexBest, false)->GetBlockHash()));
@@ -3880,7 +3880,7 @@ public:
 uint64 nLastBlockTx = 0;
 uint64 nLastBlockSize = 0;
 int64 nLastCoinStakeSearchInterval = 0;
- 
+
 // We want to sort transactions by priority and fee, so:
 typedef boost::tuple<double, double, CTransaction*> TxPriority;
 class TxPriorityCompare
