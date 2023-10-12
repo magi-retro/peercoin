@@ -11,7 +11,7 @@
 const std::string CLIENT_NAME("Magi");
 
 // Client version number
-#define CLIENT_VERSION_SUFFIX   "x11-coin-1.0"
+#define CLIENT_VERSION_SUFFIX   "-magi"
 
 
 // The following part of the code determines the CLIENT_BUILD variable.
