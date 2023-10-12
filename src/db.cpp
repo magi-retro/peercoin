@@ -653,7 +653,7 @@ bool CTxDB::LoadBlockIndex()
     bnBestChainTrust = pindexBest->bnChainTrust;
 //    if(pindexBest) {if(pindexBest->pprev) nLastPrevMoneySupply = (pindexBest->pprev)->nMoneySupply;}
     printf("LoadBlockIndex(): hashBestChain=%s  height=%d  trust=%s  MoneySupply=%"PRI64d"  date=%s\n",
-      hashBestChain.ToString().substr(0,20).c_str(), nBestHeight, bnBestChainTrust.ToString().c_str(),
+      hashBestChain.ToString().substr(0,20).c_str(), nBestHeight, bnBestChainTrust.ToString().c_str(), 
       pindexBest->nMoneySupply, DateTimeStrFormat("%x %H:%M:%S", pindexBest->GetBlockTime()).c_str());
 
     // ppcoin: load hashSyncCheckpoint
