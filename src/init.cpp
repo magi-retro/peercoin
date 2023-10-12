@@ -223,6 +223,8 @@ std::string HelpMessage()
         "  -pid=<file>            " + _("Specify pid file (default: magid.pid)") + "\n" +
         "  -gen                   " + _("Generate coins") + "\n" +
         "  -gen=0                 " + _("Don't generate coins") + "\n" +
+        "  -posii                 " + _("Stake coins - PoS-II") + "\n" +
+        "  -posii=0               " + _("Turn off staking - PoS-II") + "\n" +
         "  -datadir=<dir>         " + _("Specify data directory") + "\n" +
         "  -dbcache=<n>           " + _("Set database cache size in megabytes (default: 25)") + "\n" +
         "  -dblogsize=<n>         " + _("Set database disk log size in megabytes (default: 100)") + "\n" +
@@ -257,6 +259,7 @@ std::string HelpMessage()
 #endif
         "  -detachdb              " + _("Detach block and address databases. Increases shutdown time (default: 0)") + "\n" +
         "  -paytxfee=<amt>        " + _("Fee per KB to add to transactions you send") + "\n" +
+        "  -mininput=<amt>        " + _("When creating transactions, ignore inputs with value less than this (default: 0.01)") + "\n" +
 #ifdef QT_GUI
         "  -server                " + _("Accept command line and JSON-RPC commands") + "\n" +
 #endif
@@ -391,6 +394,7 @@ bool AppInit2()
     // ********************************************************* Step 3: parameter-to-internal-flags
 
     fDebug = GetBoolArg("-debug");
+    fDebugMagi = GetBoolArg("-debugmagi");
 
     // -debug implies fDebug*
     if (fDebug)
@@ -439,6 +443,12 @@ bool AppInit2()
             return InitError(strprintf(_("Invalid amount for -paytxfee=<amount>: '%s'"), mapArgs["-paytxfee"].c_str()));
         if (nTransactionFee > 0.25 * COIN)
             InitWarning(_("Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction."));
+    }
+
+    if (mapArgs.count("-mininput"))
+    {
+        if (!ParseMoney(mapArgs["-mininput"], nMinimumInputValue))
+            return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
     }
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
