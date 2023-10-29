@@ -1636,10 +1636,18 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
         uint64 nCoinAge;
         if (!vtx[1].GetCoinAge(txdb, nCoinAge))
             return error("ConnectBlock() : %s unable to get coin age for coinstake", vtx[1].GetHash().ToString().substr(0,10).c_str());
+//	const CBlockIndex* pIndex0 = GetLastPoSBlockIndex(pindex); // find the nearest PoS block
+	// this is mostly due to finding 1st PoS block, otherwise something wrong
+//	if (pIndex0->nHeight==0) {
+//	    pIndex0 = pindex->pprev;
+//	    printf("WARNING: ConnectBlock() set pIndex0 to the last pindex:\n");
+//	    pIndex0->print();
+//	}
         int64 nPoSReward = GetProofOfStakeReward(nCoinAge, nFees, pindex->pprev);
         if (nStakeReward > nPoSReward)
             return DoS(100, error("ConnectBlock() : stake reward exceeded (actual=%"PRI64d" vs calculated=%"PRI64d", height=%i)", nStakeReward, nPoSReward, pindex->nHeight));
     }
+
 
     // ppcoin: track money supply and mint amount info
     pindex->nMint = nValueOut - nValueIn + nFees;
