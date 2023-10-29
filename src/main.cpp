@@ -1291,7 +1291,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
 {
     // Take over previous transactions' spent pointers
     // fBlock is true when this is called from AcceptBlock when a new best-block is added to the blockchain
-    // fMiner is true when called from the internal bitcoin miner
+    // fMiner is true when called from the internal magi miner
     // ... both are false when called from CTransaction::AcceptToMemoryPool
     if (!IsCoinBase())
     {
@@ -3804,7 +3804,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// BitcoinMiner
+// MagiMiner
 //
 
 int static FormatHashBlocks(void* pbuffer, unsigned int len)
@@ -4250,10 +4250,10 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
     if (hash > hashTarget && pblock->IsProofOfWork())
-        return error("BitcoinMiner : proof-of-work not meeting target");
+        return error("MagiMiner : proof-of-work not meeting target");
 
     //// debug print
-    printf("BitcoinMiner:\n");
+    printf("MagiMiner:\n");
     printf("new block found  \n  hash: %s  \ntarget: %s\n", hash.GetHex().c_str(), hashTarget.GetHex().c_str());
     pblock->print();
     printf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue).c_str());
@@ -4262,7 +4262,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != hashBestChain)
-            return error("BitcoinMiner : generated block is stale");
+            return error("MagiMiner : generated block is stale");
 
         // Remove key from key pool
         reservekey.KeepKey();
@@ -4275,21 +4275,21 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
         // Process this block the same as if we had received it from another node
         if (!ProcessBlock(NULL, pblock))
-            return error("BitcoinMiner : ProcessBlock, block not accepted");
+            return error("MagiMiner : ProcessBlock, block not accepted");
     }
 
     return true;
 }
 
-void static ThreadBitcoinMiner(void* parg);
+void static ThreadMagiMiner(void* parg);
 
-static bool fGenerateBitcoins = false;
+static bool fGenerateMagi = false;
 static bool fLimitProcessors = false;
 static int nLimitProcessors = -1;
 
 
 
-void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
+void MagiMiner(CWallet *pwallet, bool fProofOfStake)
 {
 
 
@@ -4297,13 +4297,13 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
     // Make this thread recognisable as the mining thread
-    RenameThread("bitcoin-miner");
+    RenameThread("magi-miner");
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    while (fGenerateBitcoins || fProofOfStake)
+    while (fGenerateMagi || fProofOfStake)
     {
         if (fShutdown)
             return;
@@ -4314,7 +4314,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
             Sleep(1000);
             if (fShutdown)
                 return;
-            if (!fGenerateBitcoins && !fProofOfStake)
+            if (!fGenerateMagi && !fProofOfStake)
                 return;
         }
 
@@ -4352,7 +4352,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
             continue;
         }
 
-        printf("Running BitcoinMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
+        printf("Running MagiMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
                ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
         //
@@ -4458,35 +4458,35 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
 }
 
 
-void static ThreadBitcoinMiner(void* parg)
+void static ThreadMagiMiner(void* parg)
 {
     CWallet* pwallet = (CWallet*)parg;
     try
     {
         vnThreadsRunning[THREAD_MINER]++;
-        BitcoinMiner(pwallet, false);
+        MagiMiner(pwallet, false);
         vnThreadsRunning[THREAD_MINER]--;
     }
     catch (std::exception& e) {
         vnThreadsRunning[THREAD_MINER]--;
-        PrintException(&e, "ThreadBitcoinMiner()");
+        PrintException(&e, "ThreadMagiMiner()");
     } catch (...) {
         vnThreadsRunning[THREAD_MINER]--;
-        PrintException(NULL, "ThreadBitcoinMiner()");
+        PrintException(NULL, "ThreadMagiMiner()");
     }
     nHPSTimerStart = 0;
     if (vnThreadsRunning[THREAD_MINER] == 0)
         dHashesPerSec = 0;
-    printf("ThreadBitcoinMiner exiting, %d threads remaining\n", vnThreadsRunning[THREAD_MINER]);
+    printf("ThreadMagiMiner exiting, %d threads remaining\n", vnThreadsRunning[THREAD_MINER]);
 }
 
 
-void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
+void GenerateMagi(bool fGenerate, CWallet* pwallet)
 {
-    fGenerateBitcoins = fGenerate;
+    fGenerateMagi = fGenerate;
     nLimitProcessors = GetArg("-genproclimit", -1);
     if (nLimitProcessors == 0)
-        fGenerateBitcoins = false;
+        fGenerateMagi = false;
     fLimitProcessors = (nLimitProcessors != -1);
 
     if (fGenerate)
@@ -4498,11 +4498,11 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
         if (fLimitProcessors && nProcessors > nLimitProcessors)
             nProcessors = nLimitProcessors;
         int nAddThreads = nProcessors - vnThreadsRunning[THREAD_MINER];
-        printf("Starting %d BitcoinMiner threads\n", nAddThreads);
+        printf("Starting %d MagiMiner threads\n", nAddThreads);
         for (int i = 0; i < nAddThreads; i++)
         {
-            if (!NewThread(ThreadBitcoinMiner, pwallet))
-                printf("Error: NewThread(ThreadBitcoinMiner) failed\n");
+            if (!NewThread(ThreadMagiMiner, pwallet))
+                printf("Error: NewThread(ThreadMagiMiner) failed\n");
             Sleep(10);
         }
     }

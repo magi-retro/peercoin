@@ -1328,7 +1328,7 @@ void static ThreadStakeMiner(void* parg)
     try
     {
         vnThreadsRunning[THREAD_STAKEMINER]++;
-        BitcoinMiner(pwallet, true);
+        MagiMiner(pwallet, true);
         vnThreadsRunning[THREAD_STAKEMINER]--;
     }
     catch (std::exception& e) {
@@ -1921,7 +1921,7 @@ void StartNode(void* parg)
     }
 
     // Generate coins in the background
-    GenerateBitcoins(GetBoolArg("-gen", false), pwalletMain);
+    GenerateMagi(GetBoolArg("-gen", false), pwalletMain);
 }
 
 bool StopNode()
