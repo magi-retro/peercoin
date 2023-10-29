@@ -928,17 +928,52 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 
 static const int CUTOFF_HEIGHT = POW_CUTOFF_HEIGHT;	
 // miner's coin base reward based on nBits
-int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
+// prev nBits, nHeight
+int64 GetProofOfWorkReward(int nBits, int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 333 * COIN;
+    double nDiff = GetDifficultyFromBits(nBits);
 
-	if(nHeight == 1)
+    int64 nSubsidy = 0;
+
+    if (fTestNet && (nHeight%2 == 0))
+    {
+	if(nHeight <= 10)
 	{
-		nSubsidy = 99000 * COIN;
-		return nSubsidy + nFees;
+	    nSubsidy = 100000 * COIN;
+	    return nSubsidy + nFees;
 	}
+	nSubsidy = (100 * COIN) >> (nHeight / 1051200); // cut in half every 1.05 mil blocks ~2 years
+	if (fDebugMagi) printf("@@GPoWR-testnet nHeight = %d, nSubsidy = %"PRI64d", nDiff = %f\n", 
+	       nHeight, nSubsidy/COIN, nDiff);
+	return nSubsidy + nFees;
+    }
 
-     
+    // coins for swapping with prior magicoin
+    // 1.125 million out of 25 million total for swap, that is about 4.5%
+    // Concern of coin swap has been discussed here: https://bitcointalk.org/index.php?topic=735170.msg8772649#msg8772649
+    // Swap will be performed in a much slower pace than new XMG coin minting, so that it won't give price impact.
+    if(nHeight <= 10 && !fTestNet)
+    {
+        nSubsidy = 112500 * COIN;
+    }
+    else if (nHeight <= PRM_MAGI_POW_HEIGHT) // network dependent 1st phash magimining
+    {
+	// the higher diff, the greater subsidies for diff < 75; then less subsidies for further higher diff;
+	nSubsidy = 495.05 * pow( (5.55243*(exp_n(-0.3*nDiff/15.762) - exp_n(-0.6*nDiff/15.762)))*nDiff, 0.5) / 8.61553;
+        if (nSubsidy < 5) nSubsidy = 5;
+	nSubsidy *= COIN;
+	if (fDebug && fDebugMagi) printf("@@GPoWR nHeight = %d, nSubsidy = %"PRI64d", nDiff = %f\n", 
+	                    nHeight, nSubsidy/COIN, nDiff);
+    }
+    else if (nHeight <= END_MAGI_POW_HEIGHT) // network dependent 2nd phash magimining
+    {
+	nSubsidy = 15. * 2500. / (pow((nDiff+500.)/10., 2.));
+        if (nSubsidy < 3) nSubsidy = 3;
+	nSubsidy *= COIN;
+	for(int i = 525600; i <= nHeight; i += 525600) nSubsidy *= 0.93; // yearly decline (7%)
+    }
+    else
+	nSubsidy = MIN_TX_FEE;
 
     return nSubsidy + nFees;
 }
