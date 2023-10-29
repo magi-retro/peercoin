@@ -4161,6 +4161,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 	
         // Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
+//        pblock->nPrevMoneySupply = pindexPrev->nMoneySupply;
         if (pblock->IsProofOfStake())
             pblock->nTime      = pblock->vtx[1].nTime; //same as coinstake timestamp
         pblock->nTime          = max(pindexPrev->GetMedianTimePast()+1, pblock->GetMaxTransactionTime());
