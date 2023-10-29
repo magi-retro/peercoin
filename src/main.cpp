@@ -1045,6 +1045,40 @@ const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfSta
     return pindex;
 }
 
+// find the nearest PoS block (except pindex)
+const CBlockIndex* GetLastPoSBlockIndex(const CBlockIndex* pindex)
+{
+    while (true)
+    {
+       if (pindex->nHeight==0) {
+           printf("WARNING: GetLastPoSBlockIndex() not found; return pindexGenesisBlock\n");
+           break;
+       }
+       if (!pindex) {
+           printf("ERROR: GetLastPoSBlockIndex() pindex null identified\n");
+           break;
+       }
+       pindex = pindex->pprev;
+       if (pindex->IsProofOfStake()) break;
+    }
+    return pindex;
+}
+
+// find the nearest PoW block (except pindex)
+const CBlockIndex* GetLastPoWBlockIndex(const CBlockIndex* pindex)
+{
+    while (true)
+    {
+       if (!pindex) {
+           printf("ERROR: GetLastPoWBlockIndex() pindex null identified\n");
+           break;
+       }
+       pindex = pindex->pprev;
+       if (pindex->IsProofOfWork()) break;
+    }
+    return pindex;
+}
+
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake) 
 {
     CBigNum bnTargetLimit = bnProofOfWorkLimit;
