@@ -944,17 +944,16 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 }
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight)
+int64 GetProofOfStakeReward(int64 nCoinAge, int64 nFees, CBlockIndex* pindex)
 {
-    int64 nRewardCoinYear;
+    int64 nNetWorkWeit = GetPoSKernelPS(pindex);
+    double rAPR = GetAnnualInterest(nNetWorkWeit, MAX_MAGI_PROOF_OF_STAKE);
 
-	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
-
-    int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
+    int64 nSubsidy = nCoinAge * rAPR * COIN * 33 / (365 * 33 + 8);
 
 	if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
-    return nSubsidy;
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, pindex->nHeight);
+    return nSubsidy + nFees;
 }
 
 static const int64 nTargetTimespan = 60 * 60;
