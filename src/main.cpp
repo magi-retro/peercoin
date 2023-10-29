@@ -934,7 +934,7 @@ int64 GetProofOfWorkReward(int nBits, int nHeight, int64 nFees)
     double nDiff = GetDifficultyFromBits(nBits);
 
     int64 nSubsidy = 0;
-
+    
     if (fTestNet && (nHeight%2 == 0))
     {
 	if(nHeight <= 10)
