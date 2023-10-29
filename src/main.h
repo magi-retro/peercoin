@@ -67,6 +67,7 @@ extern uint256 hashGenesisBlock;
 extern CBlockIndex* pindexGenesisBlock;
 extern unsigned int nStakeMinAge;
 extern int nCoinbaseMaturity;
+//extern int64 nLastPrevMoneySupply;
 extern int nBestHeight;
 extern CBigNum bnBestChainTrust;
 extern CBigNum bnBestInvalidTrust;

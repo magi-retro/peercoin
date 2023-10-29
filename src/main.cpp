@@ -46,6 +46,7 @@ unsigned int nStakeTargetSpacing = 90;			// 90 sec block spacing
 int64 nChainStartTime = 1399495660;
 int nCoinbaseMaturity = 160;
 CBlockIndex* pindexGenesisBlock = NULL;
+//int64 nLastPrevMoneySupply;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
 CBigNum bnBestInvalidTrust = 0;
@@ -1929,6 +1930,7 @@ bool CBlock::SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew)
     // New best block
     hashBestChain = hash;
     pindexBest = pindexNew;
+//    if(pindexBest) {if(pindexBest->pprev) nLastPrevMoneySupply = (pindexBest->pprev)->nMoneySupply;}
     pblockindexFBBHLast = NULL;
     nBestHeight = pindexBest->nHeight;
     bnBestChainTrust = pindexNew->bnChainTrust;
