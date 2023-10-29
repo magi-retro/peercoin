@@ -4129,6 +4129,8 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
         if (fDebug && GetBoolArg("-printpriority"))
             printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
 
+	
+	
 	if (fProofOfStake)  // attempt to find a coinstake
 	{
 	    pblock->nBits = GetNextTargetRequired(pindexPrev, true);
@@ -4151,6 +4153,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 		nLastCoinStakeSearchTime = nSearchTime;
 	    }
 	}
+
 
 	if (pblock->IsProofOfWork()) // the block under minting is PoW
 	{
