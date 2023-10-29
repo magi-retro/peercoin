@@ -4281,8 +4281,6 @@ static int nLimitProcessors = -1;
 
 void MagiMiner(CWallet *pwallet, bool fProofOfStake)
 {
-
-
     printf("MagiMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
@@ -4324,8 +4322,6 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
             // ppcoin: if proof-of-stake block found then process block
             if (pblock->IsProofOfStake())
             {
-
-			
                 printf("MagiMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str());
 				
 				if (!pblock->SignBlock(*pwalletMain))
