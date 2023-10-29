@@ -2698,7 +2698,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
         printf("block.nTime = %u \n", block.nTime);
         printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
-        printf("block.nNonce = %u \n", block.nNonce);
+        printf("block.nNonce = %u \n\n", block.nNonce);
 
 
 
