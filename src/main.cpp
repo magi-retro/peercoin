@@ -978,6 +978,23 @@ int64 GetProofOfWorkReward(int nBits, int nHeight, int64 nFees)
     return nSubsidy + nFees;
 }
 
+double GetAnnualInterest_TestNet(int64 nNetWorkWeit, double rMaxAPR)
+{
+    double rAPR, rWeit=20000.;
+    rAPR = rMaxAPR * ( ( ( 2./( 1.+exp_n(1./(nNetWorkWeit/rWeit+1.)) ) - 0.53788 ) 
+           / ( 2./( 1.+exp_n(1./(rWeit+1.)) ) - 0.53788 ) ) + 1 );
+    return rAPR;
+}
+
+double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR)
+{
+    double rAPR, rWeit=20000.;
+//    if (fTestNet) return GetAnnualInterest_TestNet(nNetWorkWeit, rMaxAPR);
+    rAPR = ( ( 2./( 1.+exp_n(1./(nNetWorkWeit/rWeit+1.)) ) - 0.53788 ) * rMaxAPR 
+           / ( 2./( 1.+exp_n(1./(rWeit+1.)) ) - 0.53788 ) );
+    return rAPR;
+}
+
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 int64 GetProofOfStakeReward(int64 nCoinAge, int64 nFees, CBlockIndex* pindex)
 {
