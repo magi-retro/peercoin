@@ -4323,13 +4323,13 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
             if (pblock->IsProofOfStake())
             {
                 printf("MagiMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str());
-				
-				if (!pblock->SignBlock(*pwalletMain))
+
+		if (!pblock->SignBlock(*pwalletMain))
                 {
                     continue;
                 }
                 strMintWarning = "";
-				printf("MagiMiner : proof-of-stake block was signed %s\n", pblock->GetHash().ToString().c_str());
+		printf("MagiMiner : proof-of-stake block was signed %s\n", pblock->GetHash().ToString().c_str());
                 SetThreadPriority(THREAD_PRIORITY_NORMAL);
                 CheckWork(pblock.get(), *pwalletMain, reservekey);
                 SetThreadPriority(THREAD_PRIORITY_LOWEST);
