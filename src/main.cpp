@@ -1069,17 +1069,17 @@ const CBlockIndex* GetLastPoWBlockIndex(const CBlockIndex* pindex)
 {
     while (true)
     {
-       if (!pindex) {
-           printf("ERROR: GetLastPoWBlockIndex() pindex null identified\n");
-           break;
-       }
-       pindex = pindex->pprev;
-       if (pindex->IsProofOfWork()) break;
+	if (!pindex) {
+	    printf("ERROR: GetLastPoWBlockIndex() pindex null identified\n");
+	    break;
+	}
+	pindex = pindex->pprev;
+	if (pindex->IsProofOfWork()) break;
     }
     return pindex;
 }
 
-unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake) 
+unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
     CBigNum bnTargetLimit = bnProofOfWorkLimit;
 
