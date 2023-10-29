@@ -2195,6 +2195,11 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
     return true;
 }
 
+//bool CheckMoneySupply(CBlockIndex* pindexPrev)
+//{
+//    if (!pindexPrev || !(pindexPrev->pprev)) return true;
+//    return (pindexPrev->nMoneySupply) > (pindexPrev->pprev->nMoneySupply);
+//}
 
 bool CBlock::AcceptBlock()
 {
