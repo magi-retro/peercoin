@@ -4518,6 +4518,11 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
                         break;
                     }
 
+                    if(fDebug) {
+			printf("** hashTarget = %s\n", hashTarget.ToString().c_str());
+			printf("** hashFound  = %s\n", thash.ToString().c_str());
+		    }
+
                     SetThreadPriority(THREAD_PRIORITY_NORMAL);
                     CheckWork(pblock.get(), *pwallet, reservekey);
                     SetThreadPriority(THREAD_PRIORITY_LOWEST);
