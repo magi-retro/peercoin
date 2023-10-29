@@ -1067,16 +1067,16 @@ const CBlockIndex* GetLastPoSBlockIndex(const CBlockIndex* pindex)
 {
     while (true)
     {
-       if (pindex->nHeight==0) {
-           printf("WARNING: GetLastPoSBlockIndex() not found; return pindexGenesisBlock\n");
-           break;
-       }
-       if (!pindex) {
-           printf("ERROR: GetLastPoSBlockIndex() pindex null identified\n");
-           break;
-       }
-       pindex = pindex->pprev;
-       if (pindex->IsProofOfStake()) break;
+	if (pindex->nHeight==0) {
+	    printf("WARNING: GetLastPoSBlockIndex() not found; return pindexGenesisBlock\n");
+	    break;
+	}
+	if (!pindex) {
+	    printf("ERROR: GetLastPoSBlockIndex() pindex null identified\n");
+	    break;
+	}
+	pindex = pindex->pprev;
+	if (pindex->IsProofOfStake()) break;
     }
     return pindex;
 }
