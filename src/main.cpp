@@ -2679,8 +2679,12 @@ bool LoadBlockIndex(bool fAllowNew)
         // This will figure out a valid hash and Nonce if you're
         // creating a different genesis block:
             uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+//        printf("hashTarget == %s\n", hashTarget.ToString().c_str());
+//        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
             while (block.GetHash() > hashTarget)
                {
+//        printf("hashTarget == %s\n", hashTarget.ToString().c_str());
+//        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
                    ++block.nNonce;
                    if (block.nNonce == 0)
                    {
