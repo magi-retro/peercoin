@@ -4283,7 +4283,7 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
 {
 
 
-    printf("CPUMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
+    printf("MagiMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
     // Make this thread recognisable as the mining thread
@@ -4326,14 +4326,14 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
             {
 
 			
-                printf("CPUMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str());
+                printf("MagiMiner : proof-of-stake block found %s\n", pblock->GetHash().ToString().c_str());
 				
 				if (!pblock->SignBlock(*pwalletMain))
                 {
                     continue;
                 }
                 strMintWarning = "";
-				printf("CPUMiner : proof-of-stake block was signed %s\n", pblock->GetHash().ToString().c_str());
+				printf("MagiMiner : proof-of-stake block was signed %s\n", pblock->GetHash().ToString().c_str());
                 SetThreadPriority(THREAD_PRIORITY_NORMAL);
                 CheckWork(pblock.get(), *pwalletMain, reservekey);
                 SetThreadPriority(THREAD_PRIORITY_LOWEST);
