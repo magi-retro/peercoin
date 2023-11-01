@@ -43,6 +43,9 @@ unsigned int nStakeMinAge = 60 * 60 * 8;	// minimum age for coin age: 3h
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;	// stake age of full weight: -1
 unsigned int nStakeTargetSpacing = 90;			// 90 sec block spacing
 
+static const int64 nTargetTimespan = 60 * 60;
+static const int64 nTargetSpacingWorkMax = 2 * nStakeTargetSpacing; 
+
 int64 nChainStartTime = 1399495660;
 int nCoinbaseMaturity = 160;
 CBlockIndex* pindexGenesisBlock = NULL;
@@ -1028,9 +1031,6 @@ int64 GetProofOfStakeReward(int64 nCoinAge, int64 nFees, CBlockIndex* pindex)
 
     return nSubsidy + nFees;
 }
-
-static const int64 nTargetTimespan = 60 * 60;
-static const int64 nTargetSpacingWorkMax = 2 * nStakeTargetSpacing; 
 
 //
 // maximum nBits value could possible be required nTime after
