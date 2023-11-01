@@ -44,7 +44,7 @@ unsigned int nStakeMaxAge = 60 * 60 * 24 * 30;	// stake age of full weight: -1
 unsigned int nStakeTargetSpacing = 90;			// 90 sec block spacing
 
 static const int64 nTargetTimespan = 60 * 60;
-static const int64 nTargetSpacingWorkMax = 2 * nStakeTargetSpacing; 
+static const int64 nTargetSpacingWork = 2 * nStakeTargetSpacing; 
 
 int64 nChainStartTime = 1399495660;
 int nCoinbaseMaturity = 160;
@@ -1150,7 +1150,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
 
-    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
+    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWork, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
     int64 nInterval = nTargetTimespan / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
