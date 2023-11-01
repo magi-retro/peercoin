@@ -1992,7 +1992,7 @@ bool CTransaction::GetCoinAge(CTxDB& txdb, uint64& nCoinAge) const
         CTransaction txPrev;
         CTxIndex txindex;
 
-        if (!txPrev.ReadFromDisk(txdb, txin.prevout, txindex))
+	if (!txPrev.ReadFromDisk(txdb, txin.prevout, txindex))
             continue;  // previous transaction not in main chain
         if (nTime < txPrev.nTime)
             return false;  // Transaction timestamp violation
