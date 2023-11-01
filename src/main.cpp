@@ -1991,6 +1991,7 @@ bool CTransaction::GetCoinAge(CTxDB& txdb, uint64& nCoinAge) const
         // First try finding the previous transaction in database
         CTransaction txPrev;
         CTxIndex txindex;
+
         if (!txPrev.ReadFromDisk(txdb, txin.prevout, txindex))
             continue;  // previous transaction not in main chain
         if (nTime < txPrev.nTime)
