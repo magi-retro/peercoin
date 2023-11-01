@@ -2643,7 +2643,6 @@ bool LoadBlockIndex(bool fAllowNew)
         nStakeMaxAge = 4* 60 * 60; // test net min age is 60 min
 
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
-        nStakeTargetSpacing = 30; // test block spacing is 3 minutes
     }
 
     //
