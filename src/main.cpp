@@ -2633,10 +2633,10 @@ bool LoadBlockIndex(bool fAllowNew)
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xdd;
-        pchMessageStart[1] = 0x4d;
-        pchMessageStart[2] = 0xdd;
-        pchMessageStart[3] = 0x4d;
+        pchMessageStart[0] = 0xf0;
+        pchMessageStart[1] = 0xb9;
+        pchMessageStart[2] = 0xb3;
+        pchMessageStart[3] = 0xd7;
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
