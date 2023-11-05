@@ -2644,7 +2644,7 @@ bool LoadBlockIndex(bool fAllowNew)
         nStakeMinAge = 60 * 10; 		// test net min age: 10 min
         nStakeMaxAge = 60 * 60 * 24 * 60;	// test net max age: 60 days
 
-        nCoinbaseMaturity = 10; // test maturity is 10 blocks
+        nCoinbaseMaturity = 10; 		// test maturity is 10 blocks
     }
 
     //
