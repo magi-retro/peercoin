@@ -2682,6 +2682,11 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nNonce   = 1780637;
 
 	
+        if (fTestNet)
+        {
+            block.nTime    = 1407209708;
+            block.nNonce   = 23721450;
+        }
         if (true && (block.GetHash() != hashGenesisBlock)) {
         // This will figure out a valid hash and Nonce if you're
         // creating a different genesis block:
