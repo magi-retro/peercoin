@@ -2220,6 +2220,8 @@ bool CBlock::AcceptBlock()
     if (IsProofOfWork() && !IsMiningProofOfWork(nHeight))
 	return DoS(100, error("AcceptBlock() : No proof-of-work allowed anymore (height = %d)", nHeight));
 
+    if (IsProofOfStake() && !IsMiningProofOfStake(nHeight))
+        return DoS(100, error("AcceptBlock() : reject proof-of-stake at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
