@@ -2223,6 +2223,9 @@ bool CBlock::AcceptBlock()
     if (IsProofOfStake() && !IsMiningProofOfStake(nHeight))
         return DoS(100, error("AcceptBlock() : reject proof-of-stake at height %d", nHeight));
 
+//    if (IsProofOfStake() && !CheckMoneySupply(pindexPrev))
+//        return DoS(100, error("AcceptBlock() : Wrong Money Supply = %"PRI64d" at height %d", pindexPrev->nMoneySupply, nHeight-1));
+
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
         return DoS(100, error("AcceptBlock() : incorrect %s", IsProofOfWork() ? "proof-of-work" : "proof-of-stake"));
