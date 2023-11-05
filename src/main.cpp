@@ -2639,7 +2639,7 @@ bool LoadBlockIndex(bool fAllowNew)
         pchMessageStart[3] = 0xd7;
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
-        bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
+        bnProofOfWorkLimit = bnProofOfWorkLimitTestNet;  // 0x0000ffff PoW base target is fixed in testnet
 
         nStakeMinAge = 20 * 60; // test net min age is 20 min
         nStakeMaxAge = 4* 60 * 60; // test net min age is 60 min
