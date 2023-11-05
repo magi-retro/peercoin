@@ -947,7 +947,6 @@ double GetDifficultyFromBits(unsigned int nBits){
     return dDiff;
 }
 
-static const int CUTOFF_HEIGHT = POW_CUTOFF_HEIGHT;	
 // miner's coin base reward based on nBits
 // prev nBits, nHeight
 int64 GetProofOfWorkReward(int nBits, int nHeight, int64 nFees)
