@@ -2664,7 +2664,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "7/5/14";
+        const char* pszTimestamp = "Super fracking, Physics Today 67(8), 34 (2014); doi: 10.1063/PT.3.2480";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2677,9 +2677,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1399495660;
+        block.nTime    = 1410566399;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 193526;
+        block.nNonce   = 1780637;
         if (false ) {
 
         // This will figure out a valid hash and Nonce if you're
