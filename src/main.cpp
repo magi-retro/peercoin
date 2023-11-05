@@ -2641,8 +2641,8 @@ bool LoadBlockIndex(bool fAllowNew)
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet;  // 0x0000ffff PoW base target is fixed in testnet
 
-        nStakeMinAge = 20 * 60; // test net min age is 20 min
-        nStakeMaxAge = 4* 60 * 60; // test net min age is 60 min
+        nStakeMinAge = 60 * 10; 		// test net min age: 10 min
+        nStakeMaxAge = 60 * 60 * 24 * 60;	// test net max age: 60 days
 
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
     }
