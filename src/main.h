@@ -55,6 +55,8 @@ inline bool IsMiningProofOfWork(int nHeight)
 {
     return nHeight <= MAX_MAGI_POW_HEIGHT;
 }
+//inline bool IsMiningProofOfWork() { return true; }
+
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
 #else
