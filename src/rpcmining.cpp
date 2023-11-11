@@ -348,6 +348,31 @@ Value getwork(const Array& params, bool fHelp)
 
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
+if (fDebug && fDebugMagi)
+{
+    std::string cdata = HexStr(BEGIN(pdata), END(pdata));
+    std::string chashTarget = HexStr(BEGIN(hashTarget), END(hashTarget));
+    printf(">>$ work sent: \n");
+    printf("nVersion:       %i\n", pblock->nVersion);
+    printf("hashPrevBlock:  0x%s\n", pblock->hashPrevBlock.GetHex().c_str());
+    printf("hashMerkleRoot: 0x%s\n", pblock->hashMerkleRoot.GetHex().c_str());
+    printf("nTime:          %i\n", pblock->nTime);
+    printf("nBits:          %i\n", pblock->nBits);
+    printf("nNonce:         %i\n", pblock->nNonce);
+    printf("-----------------\n");
+    printf("hashTarget:     0x%s\n", hashTarget.GetHex().c_str());
+    printf(">>$ work sent (bytes swapped): \n");
+    printf("all:            0x%s\n", cdata.c_str());
+    printf("nVersion:       0x%s\n", cdata.substr(0, 8).c_str());
+    printf("hashPrevBlock:  0x%s\n", cdata.substr(8, 64).c_str());
+    printf("hashMerkleRoot: 0x%s\n", cdata.substr(72, 64).c_str());
+    printf("nTime:          0x%s\n", cdata.substr(136, 8).c_str());
+    printf("nBits:          0x%s\n", cdata.substr(144, 8).c_str());
+    printf("nNonce:         0x%s\n", cdata.substr(152, 8).c_str());
+    printf("-----------------\n");
+    printf("hashTarget:     0x%s\n\n", chashTarget.c_str());
+}
+
         Object result; // HexStr: inverst bytes
         result.push_back(Pair("midstate", HexStr(BEGIN(pmidstate), END(pmidstate)))); // deprecated
         result.push_back(Pair("data",     HexStr(BEGIN(pdata), END(pdata))));
@@ -366,6 +391,20 @@ Value getwork(const Array& params, bool fHelp)
         // Byte reverse
         for (int i = 0; i < 128/4; i++)
             ((unsigned int*)pdata)[i] = ByteReverse(((unsigned int*)pdata)[i]);
+if (fDebug && fDebugMagi)
+{
+    printf("<<$ work received: \n");
+    uint256 hashTarget_rc = CBigNum().SetCompact(pdata->nBits).getuint256();
+    printf("nVersion:       %i\n", pdata->nVersion);
+    printf("hashPrevBlock:  0x%s\n", pdata->hashPrevBlock.GetHex().c_str());
+    printf("hashMerkleRoot: 0x%s\n", pdata->hashMerkleRoot.GetHex().c_str());
+    printf("nTime:          %i\n", pdata->nTime);
+    printf("nBits:          %i\n", pdata->nBits);
+    printf("nNonce:         %i\n", pdata->nNonce);
+    printf("-----------------\n");
+    printf("hashTarget:     0x%s\n", hashTarget_rc.GetHex().c_str());
+    printf("hash:           0x%s\n\n", pdata->GetHash().GetHex().c_str());
+}
 
         // Get saved block
         if (!mapNewBlock.count(pdata->hashMerkleRoot))
