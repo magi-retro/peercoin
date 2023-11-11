@@ -952,7 +952,10 @@ public:
 
     uint256 GetHash() const
     {
+//        unsigned int nNonce2 = nNonce / 2;
 	return hash_M7M(BEGIN(nVersion), END(nNonce));
+//	return hash_d_M7(BEGIN(nVersion), END(nNonce));
+//	return hash_f_M7(BEGIN(nVersion), END(nNonce));
     }
 
     int64 GetBlockTime() const
