@@ -155,6 +155,18 @@ double GetAnnualInterest_TestNet(int64 nNetWorkWeit, double rMaxAPR);
 double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR);
 //bool CheckMoneySupply(CBlockIndex* pindexPrev);
 
+inline double exp_n(double xt)
+{
+    double p1 = -700.0, p3 = -0.8e-8, p4 = 0.8e-8, p6 = 700.0;
+    if(xt < p1)
+        return 0;
+    else if(xt > p6)
+        return 1e200;
+    else if(xt > p3 && xt < p4)
+        return (1.0 + xt);
+    else
+        return exp(xt);
+}
 
 
 bool GetWalletFile(CWallet* pwallet, std::string &strWalletFileOut);
