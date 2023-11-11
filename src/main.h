@@ -10,7 +10,7 @@
 #include "net.h"
 #include "script.h"
 #include "scrypt_mine.h"
-#include "hashblock.h"
+#include "hash_magi.h"
 
 #include <list>
 
