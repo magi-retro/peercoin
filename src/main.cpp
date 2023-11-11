@@ -4428,7 +4428,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
 void static ThreadMagiMiner(void* parg);
 
-static bool fGenerateMagi = false;
+static bool fGenerateBitcoins = false;
 static bool fLimitProcessors = false;
 static int nLimitProcessors = -1;
 
@@ -4446,7 +4446,7 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    while (fGenerateMagi || fProofOfStake)
+    while (fGenerateBitcoins || fProofOfStake)
     {
         if (fShutdown)
             return;
@@ -4457,7 +4457,7 @@ void MagiMiner(CWallet *pwallet, bool fProofOfStake)
             Sleep(1000);
             if (fShutdown)
                 return;
-            if (!fGenerateMagi && !fProofOfStake)
+            if (!fGenerateBitcoins && !fProofOfStake)
                 return;
         }
 
@@ -4625,12 +4625,12 @@ void static ThreadMagiMiner(void* parg)
 }
 
 
-void GenerateMagi(bool fGenerate, CWallet* pwallet)
+void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
 {
-    fGenerateMagi = fGenerate;
+    fGenerateBitcoins = fGenerate;
     nLimitProcessors = GetArg("-genproclimit", -1);
     if (nLimitProcessors == 0)
-        fGenerateMagi = false;
+        fGenerateBitcoins = false;
     fLimitProcessors = (nLimitProcessors != -1);
 
     if (fGenerate)
