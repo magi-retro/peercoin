@@ -293,7 +293,7 @@ Value getwork(const Array& params, bool fHelp)
     static CReserveKey reservekey(pwalletMain);
 
     if (params.size() == 0)
-    {
+    { 
         // Update block
         static unsigned int nTransactionsUpdatedLast;
         static CBlockIndex* pindexPrev;
