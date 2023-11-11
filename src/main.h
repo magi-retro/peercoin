@@ -146,6 +146,8 @@ std::string GetWarnings(std::string strFor);
 bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock);
 uint256 WantedByOrphan(const CBlock* pblockOrphan);
 const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
+const CBlockIndex* GetLastPoSBlockIndex(const CBlockIndex* pindex);
+const CBlockIndex* GetLastPoWBlockIndex(const CBlockIndex* pindex);
 void MagiMiner(CWallet *pwallet, bool fProofOfStake);
 void ResendWalletTransactions();
 //bool CheckMoneySupply(CBlockIndex* pindexPrev);
