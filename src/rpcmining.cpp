@@ -70,11 +70,16 @@ Value getmininginfo(const Array& params, bool fHelp)
             "Returns an object containing mining-related information.");
     int64_t nNetWorkWeit = GetPoSKernelPS();
 
-    Object obj;
+    Object obj, diff;
     obj.push_back(Pair("blocks",        (int)nBestHeight));
     obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
     obj.push_back(Pair("currentblocktx",(uint64_t)nLastBlockTx));
-    obj.push_back(Pair("difficulty",    (double)GetDifficulty()));
+
+    diff.push_back(Pair("proof-of-work",   GetDifficulty()));
+    diff.push_back(Pair("proof-of-stake",  GetDifficulty(GetLastBlockIndex(pindexBest, true))));
+    diff.push_back(Pair("search-interval", (int)nLastCoinStakeSearchInterval));
+    obj.push_back(Pair("difficulty",       diff));
+
     obj.push_back(Pair("blockvalue",       (uint64_t)(GetProofOfWorkReward(pindexBest->nBits, pindexBest->nHeight, 0)/COIN)));
     obj.push_back(Pair("netmhashps",       GetPoWMHashPS()));
     obj.push_back(Pair("netstakeweight",   GetPoSKernelPS()));
