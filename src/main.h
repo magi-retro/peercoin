@@ -952,7 +952,7 @@ public:
 
     uint256 GetHash() const
     {
-            return Hash9(BEGIN(nVersion), END(nNonce));
+            return hash_M7M(BEGIN(nVersion), END(nNonce));
     }
 
     int64 GetBlockTime() const
