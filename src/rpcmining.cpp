@@ -68,6 +68,7 @@ Value getmininginfo(const Array& params, bool fHelp)
         throw runtime_error(
             "getmininginfo\n"
             "Returns an object containing mining-related information.");
+    int64_t nNetWorkWeit = GetPoSKernelPS();
 
     Object obj;
     obj.push_back(Pair("blocks",        (int)nBestHeight));
@@ -83,6 +84,7 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("hashespersec",  gethashespersec(params, false)));
 	obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
     obj.push_back(Pair("pooledtx",      (uint64_t)mempool.size()));
+    obj.push_back(Pair("stakeinterest",    (double)GetAnnualInterest((int64)nNetWorkWeit, MAX_MAGI_PROOF_OF_STAKE)));
     obj.push_back(Pair("testnet",       fTestNet));
     return obj;
 }
