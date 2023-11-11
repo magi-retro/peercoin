@@ -151,6 +151,8 @@ const CBlockIndex* GetLastPoWBlockIndex(const CBlockIndex* pindex);
 void MagiMiner(CWallet *pwallet, bool fProofOfStake);
 void ResendWalletTransactions();
 double GetDifficultyFromBits(unsigned int nBits);
+double GetAnnualInterest_TestNet(int64 nNetWorkWeit, double rMaxAPR);
+double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR);
 //bool CheckMoneySupply(CBlockIndex* pindexPrev);
 
 
