@@ -43,6 +43,7 @@ Value setgenerate(const Array& params, bool fHelp)
     }
     mapArgs["-gen"] = (fGenerate ? "1" : "0");
 
+    assert(pwalletMain != NULL);
     GenerateMagi(fGenerate, pwalletMain);
     return Value::null;
 }
