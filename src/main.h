@@ -36,7 +36,7 @@ static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = .0001 * COIN;
 static const int64 MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64 MAX_MONEY = 25000000 * COIN;			// 25 mil
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.0333 * COIN;	// 3.33% annual interest
+static const int64 MAX_MAGI_PROOF_OF_STAKE = 0.0333 * COIN;	// 3.33% annual interest
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
