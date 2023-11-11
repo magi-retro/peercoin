@@ -150,6 +150,7 @@ const CBlockIndex* GetLastPoSBlockIndex(const CBlockIndex* pindex);
 const CBlockIndex* GetLastPoWBlockIndex(const CBlockIndex* pindex);
 void MagiMiner(CWallet *pwallet, bool fProofOfStake);
 void ResendWalletTransactions();
+double GetDifficultyFromBits(unsigned int nBits);
 //bool CheckMoneySupply(CBlockIndex* pindexPrev);
 
 
