@@ -387,7 +387,9 @@ if (fDebug && fDebugMagi)
         // Parse parameters
         vector<unsigned char> vchData = ParseHex(params[0].get_str());
         if (vchData.size() != 128)
+	{
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
+	}
         CBlock* pdata = (CBlock*)&vchData[0];
 
         // Byte reverse
@@ -418,8 +420,11 @@ if (fDebug && fDebugMagi)
         pblock->vtx[0].vin[0].scriptSig = mapNewBlock[pdata->hashMerkleRoot].second;
         pblock->hashMerkleRoot = pblock->BuildMerkleTree();
 
+
         if (!pblock->SignBlock(*pwalletMain))
+	{
             throw JSONRPCError(-100, "Unable to sign block, wallet locked?");
+	}
 
         return CheckWork(pblock, *pwalletMain, reservekey);
     }
