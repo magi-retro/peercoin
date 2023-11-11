@@ -359,6 +359,7 @@ if (fDebug && fDebugMagi)
     printf("nTime:          %i\n", pblock->nTime);
     printf("nBits:          %i\n", pblock->nBits);
     printf("nNonce:         %i\n", pblock->nNonce);
+//    printf("nPrevMoneySupply: %"PRI64d"\n", pblock->nPrevMoneySupply);
     printf("-----------------\n");
     printf("hashTarget:     0x%s\n", hashTarget.GetHex().c_str());
     printf(">>$ work sent (bytes swapped): \n");
@@ -369,6 +370,7 @@ if (fDebug && fDebugMagi)
     printf("nTime:          0x%s\n", cdata.substr(136, 8).c_str());
     printf("nBits:          0x%s\n", cdata.substr(144, 8).c_str());
     printf("nNonce:         0x%s\n", cdata.substr(152, 8).c_str());
+//    printf("nPrevMoneySupply: 0x%s\n", cdata.substr(160, 16).c_str());
     printf("-----------------\n");
     printf("hashTarget:     0x%s\n\n", chashTarget.c_str());
 }
