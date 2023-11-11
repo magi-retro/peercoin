@@ -43,7 +43,7 @@ Value setgenerate(const Array& params, bool fHelp)
     }
     mapArgs["-gen"] = (fGenerate ? "1" : "0");
 
-    GenerateBitcoins(fGenerate, pwalletMain);
+    GenerateMagi(fGenerate, pwalletMain);
     return Value::null;
 }
 
