@@ -94,7 +94,7 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("stakeweight",      weight));
 
     obj.push_back(Pair("stakeinterest",    (double)GetAnnualInterest((int64)nNetWorkWeit, MAX_MAGI_PROOF_OF_STAKE)));
-    obj.push_back(Pair("testnet",       fTestNet));
+    obj.push_back(Pair("testnet",          fTestNet));
     obj.push_back(Pair("generate",         GetBoolArg("-gen")));
     obj.push_back(Pair("genproclimit",     (int)GetArg("-genproclimit", -1)));
     obj.push_back(Pair("hashespersec",     gethashespersec(params, false)));
