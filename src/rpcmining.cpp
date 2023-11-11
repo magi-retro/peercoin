@@ -62,6 +62,7 @@ Value gethashespersec(const Array& params, bool fHelp)
 }
 
 
+inline double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR, int nHeight);
 Value getmininginfo(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
