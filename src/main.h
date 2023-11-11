@@ -32,10 +32,10 @@ static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
-static const unsigned int MAX_INV_SZ = 30000;
-static const int64 MIN_TX_FEE = .00001 * COIN;
-static const int64 MIN_RELAY_TX_FEE = .00001 * COIN;
-static const int64 MAX_MONEY = 60000000 * COIN;
+static const unsigned int MAX_INV_SZ = 50000;
+static const int64 MIN_TX_FEE = .0001 * COIN;
+static const int64 MIN_RELAY_TX_FEE = MIN_TX_FEE;
+static const int64 MAX_MONEY = 25000000 * COIN;			// 25 mil
 static const int64 MAX_MONEY2 = 60000000 * COIN;			// 60 mil
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0.0333 * COIN;	// 3.33% annual interest
 
