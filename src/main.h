@@ -157,13 +157,6 @@ double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR);
 
 
 
-
-
-
-
-
-
-
 bool GetWalletFile(CWallet* pwallet, std::string &strWalletFileOut);
 
 /** Position on disk for a particular transaction. */
