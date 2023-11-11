@@ -57,6 +57,12 @@ inline bool IsMiningProofOfWork(int nHeight)
 }
 //inline bool IsMiningProofOfWork() { return true; }
 
+inline bool IsMiningProofOfStake(int nHeight )
+{
+    if (fTestNet) return nHeight > 10;
+    return nHeight > 6720; // two weeks
+}
+
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
 #else
