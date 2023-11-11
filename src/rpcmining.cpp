@@ -61,7 +61,6 @@ Value gethashespersec(const Array& params, bool fHelp)
     return (boost::int64_t)dHashesPerSec;
 }
 
-
 inline double GetAnnualInterest(int64 nNetWorkWeit, double rMaxAPR, int nHeight);
 Value getmininginfo(const Array& params, bool fHelp)
 {
