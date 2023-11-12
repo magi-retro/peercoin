@@ -147,15 +147,6 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
         fGeneratedStakeModifier = true;
         return true;  // genesis block's modifier is 0
     }
-    // fix ba.dgercoin
-
-    if ( IsProtocolModifierIntervalChange(pindexPrev->nHeight)){
-        nModifierInterval = fTestNet?MODIFIER_INTERVAL_NEW_TESTNET:MODIFIER_INTERVAL_NEW;
-        //printf("Switching to new modifier interval %i @ block %i", nModifierInterval,pindexPrev->nHeight );
-    }
-
-
-
     // First find current stake modifier and its generation block time
     // if it's not old enough, return the same stake modifier
     int64 nModifierTime = 0;
