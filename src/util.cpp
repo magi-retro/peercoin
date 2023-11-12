@@ -1255,7 +1255,7 @@ int64_t GetTimeOffset()
 
 int64 GetAdjustedTime()
 {
-    return GetTime() + nTimeOffset;
+    return GetTime() + GetTimeOffset();
 }
 
 void AddTimeData(const CNetAddr& ip, int64 nTime)
