@@ -398,7 +398,7 @@ public:
 
     friend class uint160;
     friend class uint256;
-	friend class uint512;
+    friend class uint512;
     friend inline int Testuint256AdHoc(std::vector<std::string> vArg);
 };
 
