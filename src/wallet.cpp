@@ -1594,7 +1594,14 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     {
         uint64 nCoinAge;
         CTxDB txdb("r");
-		const CBlockIndex* pIndex0 = GetLastBlockIndex(pindexBest, false);
+	// creating PoS block; find the nearest PoS block
+//	const CBlockIndex* pIndex0 = ((pindexBest->IsProofOfStake()) ? pindexBest : GetLastPoSBlockIndex(pindexBest));
+//	// this is mostly due to finding 1st PoS block, otherwise something wrong
+//	if (pIndex0->nHeight==0) {
+//	    pIndex0 = pindexBest;
+//	    printf("WARNING: CreateCoinStake() set pIndex0 to pindexBest:\n");
+//	    pIndex0->print();
+//	}
 
         if (!txNew.GetCoinAge(txdb, nCoinAge))
             return error("CreateCoinStake : failed to calculate coin age");
