@@ -1374,7 +1374,7 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, int64 nValue, CWalletTx& w
     return CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, coinControl);
 }
 
-bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64& nMinWeight, uint64& nMaxWeight, uint64& nWeight)
+bool CWallet::GetStakeWeight(uint64& nMinWeight, uint64& nMaxWeight, uint64& nWeight)
 {
     // Choose coins to use
     int64 nBalance = GetBalance();
@@ -1405,7 +1405,10 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64& nMinWeight, uint
                 continue;
         }
 
-        int64 nTimeWeight = GetWeight((int64)pcoin.first->nTime, (int64)GetTime());
+//        int64 nTimeWeight = GetWeight((int64)pcoin.first->nTime, (int64)GetTime());
+	CTransaction txPrev=*pcoin.first;
+	COutPoint prevout = COutPoint(pcoin.first->GetHash(), pcoin.second);
+	int64 nTimeWeight = GetMagiWeight(txPrev.vout[prevout.n].nValue, (int64)pcoin.first->nTime, (int64)GetTime());
         CBigNum bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
 
 	// Weight is greater than zero
