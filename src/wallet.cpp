@@ -1436,7 +1436,7 @@ bool CWallet::GetStakeWeight(uint64& nMinWeight, uint64& nMaxWeight, uint64& nWe
 }
 
 // ppcoin: create coin stake transaction
-bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, CTransaction& txNew)
+bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, int64_t nFees, CTransaction& txNew)
 {
     CBigNum bnTargetPerCoinDay;
     bnTargetPerCoinDay.SetCompact(nBits);
@@ -1485,9 +1485,13 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 		}
 
         static int nMaxStakeSearchInterval = 60;
-		
-		// printf(">> block.GetBlockTime() = %"PRI64d", nStakeMinAge = %d, txNew.nTime = %d\n", block.GetBlockTime(), nStakeMinAge,txNew.nTime); 
-        if (block.GetBlockTime() + nStakeMinAge > txNew.nTime - nMaxStakeSearchInterval)
+
+	CTransaction txPrev=*pcoin.first;
+	COutPoint prevout = COutPoint(pcoin.first->GetHash(), pcoin.second);
+	int64 nTimeWeight = GetMagiWeight(txPrev.vout[prevout.n].nValue, block.GetBlockTime(), (int64)(txNew.nTime - nMaxStakeSearchInterval));
+
+		if (fDebugMagi && (pindexBest->nHeight%10 == 0)) printf(">* CreateCoinStake : block.GetBlockTime() = %"PRI64d", nStakeMinAge = %d, txNew.nTime = %d, nTimeWeight = %"PRI64d" \n", block.GetBlockTime(), nStakeMinAge, txNew.nTime, nTimeWeight);
+        if (nTimeWeight < nStakeMinAge)
             continue; // only count coins meeting min age requirement
 
         bool fKernelFound = false;
@@ -1498,8 +1502,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             // Search nSearchInterval seconds back up to nMaxStakeSearchInterval
             uint256 hashProofOfStake = 0;
             COutPoint prevoutStake = COutPoint(pcoin.first->GetHash(), pcoin.second);
-            if (CheckStakeKernelHash(nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, *pcoin.first, prevoutStake, txNew.nTime - n, hashProofOfStake))
-            {
+            if (CheckStakeKernelHash(pindexBest, nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, *pcoin.first, prevoutStake, txNew.nTime - n, hashProofOfStake))
+	    {
                // Found a kernel
                 if (fDebug && GetBoolArg("-printcoinstake"))
                     printf("CreateCoinStake : kernel found\n");
@@ -1544,7 +1548,12 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
                 vwtxPrev.push_back(pcoin.first);
                 txNew.vout.push_back(CTxOut(0, scriptPubKeyOut));
-                if (block.GetBlockTime() + nStakeSplitAge > txNew.nTime)
+
+		CTransaction txPrev=*pcoin.first;
+		COutPoint prevout = COutPoint(pcoin.first->GetHash(), pcoin.second);
+		int64 nTimeWeight = GetMagiWeight(txPrev.vout[prevout.n].nValue, block.GetBlockTime(), (int64)txNew.nTime);
+
+		if ((unsigned int)nTimeWeight < nStakeSplitAge)
                     txNew.vout.push_back(CTxOut(0, scriptPubKeyOut)); //split stake
 
                 if (fDebug && GetBoolArg("-printcoinstake"))
@@ -1581,8 +1590,11 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             // Do not add additional significant input
             if (pcoin.first->vout[pcoin.second].nValue > nStakeCombineThreshold)
                 continue;
-            // Do not add input that is still too young
-            if (pcoin.first->nTime + nStakeMaxAge > txNew.nTime)
+	    // Do not add input that is still too young
+	    CTransaction txPrev=*pcoin.first;
+	    COutPoint prevout = COutPoint(pcoin.first->GetHash(), pcoin.second);
+	    int64 nTimeWeight = GetMagiWeight(txPrev.vout[prevout.n].nValue, (int64)pcoin.first->nTime, (int64)txNew.nTime);
+            if (nTimeWeight < nStakeMinAge)
                 continue;
             txNew.vin.push_back(CTxIn(pcoin.first->GetHash(), pcoin.second));
             nCredit += pcoin.first->vout[pcoin.second].nValue;
@@ -1605,7 +1617,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
         if (!txNew.GetCoinAge(txdb, nCoinAge))
             return error("CreateCoinStake : failed to calculate coin age");
-        nCredit += GetProofOfStakeReward(nCoinAge, nBits, txNew.nTime, pIndex0->nHeight);
+        nCredit += GetProofOfStakeReward(nCoinAge, nFees, pindexBest);
     }
 
     int64 nMinFee = 0;
