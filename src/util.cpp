@@ -65,6 +65,7 @@ using namespace std;
 map<string, string> mapArgs;
 map<string, vector<string> > mapMultiArgs;
 bool fDebug = false;
+bool fDebugMagi = false;
 bool fDebugNet = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugger = false;
@@ -1246,6 +1247,11 @@ void SetMockTime(int64 nMockTimeIn)
 }
 
 static int64 nTimeOffset = 0;
+
+int64_t GetTimeOffset()
+{
+    return nTimeOffset;
+}
 
 int64 GetAdjustedTime()
 {
