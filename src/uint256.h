@@ -11,6 +11,7 @@
 #include <inttypes.h>
 #include <string>
 #include <vector>
+#include <gmpxx.h>
 
 typedef long long  int64;
 typedef unsigned long long  uint64;
@@ -757,6 +758,18 @@ inline const uint512 operator&(const uint512& a, const uint512& b)      { return
 inline const uint512 operator|(const uint512& a, const uint512& b)      { return (base_uint512)a |  (base_uint512)b; }
 inline const uint512 operator+(const uint512& a, const uint512& b)      { return (base_uint512)a +  (base_uint512)b; }
 inline const uint512 operator-(const uint512& a, const uint512& b)      { return (base_uint512)a -  (base_uint512)b; }
+
+
+inline void mpz_set_uint256(mpz_t r, uint256& u)
+{
+    mpz_import(r, 32 / sizeof(unsigned long), -1, sizeof(unsigned long), -1, 0, &u);
+}
+
+
+inline void mpz_set_uint512(mpz_t r, uint512& u)
+{
+    mpz_import(r, 64 / sizeof(unsigned long), -1, sizeof(unsigned long), -1, 0, &u);
+}
 
 #ifdef TEST_UINT256
 
