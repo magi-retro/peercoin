@@ -595,6 +595,7 @@ void ParseParameters(int argc, const char* const argv[])
     }
 }
 
+//if string strArg exists in mapArgs, return the corresponding value (string), otherwise return strDefault (string)
 std::string GetArg(const std::string& strArg, const std::string& strDefault)
 {
     if (mapArgs.count(strArg))
@@ -602,6 +603,7 @@ std::string GetArg(const std::string& strArg, const std::string& strDefault)
     return strDefault;
 }
 
+//if string strArg exists in mapArgs, return the corresponding value (int64), otherwise return strDefault (string) (int64)
 int64 GetArg(const std::string& strArg, int64 nDefault)
 {
     if (mapArgs.count(strArg))
@@ -609,6 +611,9 @@ int64 GetArg(const std::string& strArg, int64 nDefault)
     return nDefault;
 }
 
+// if strArg appears in mapArgs and strArg is non-zero value, return true, 
+// if strArg appears in mapArgs and strArg is zero, return false, 
+// if strArg does not appear in mapArgs, return fDefault, 
 bool GetBoolArg(const std::string& strArg, bool fDefault)
 {
     if (mapArgs.count(strArg))
