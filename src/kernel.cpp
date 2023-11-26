@@ -365,8 +365,6 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
     int nStakeModifierHeight = 0;
     int64 nStakeModifierTime = 0;
 
-
-
     if (!GetKernelStakeModifier(blockFrom.GetHash(), nStakeModifier, nStakeModifierHeight, nStakeModifierTime, fPrintProofOfStake))
 	{
 		// printf(">>> CheckStakeKernelHash: GetKernelStakeModifier return false\n");
