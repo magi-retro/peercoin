@@ -19,16 +19,6 @@ extern int nStakeTargetSpacing;
 unsigned int nModifierInterval = MODIFIER_INTERVAL;
 
 
-unsigned int nProtocolModifierIntervalChangeSwitchHeight     = 14420;
-unsigned int nProtocolModifierIntervalChangeTestSwitchHeight = 100;
-
-bool IsProtocolModifierIntervalChange(unsigned int nBlockHeight)
-{
-    return false;
-    // return (nBlockHeight >= (fTestNet? nProtocolModifierIntervalChangeTestSwitchHeight : nProtocolModifierIntervalChangeSwitchHeight));
-}
-
-
 // Hard checkpoints of stake modifiers to ensure they are deterministic
 static std::map<int, unsigned int> mapStakeModifierCheckpoints =
     boost::assign::map_list_of
