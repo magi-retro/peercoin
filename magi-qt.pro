@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = x11coin-qt
+TARGET = magi-qt
 VERSION = 0.7.2
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
@@ -315,7 +315,7 @@ SOURCES += src/qt/test/test_main.cpp \
 HEADERS += src/qt/test/uritests.h
 DEPENDPATH += src/qt/test
 QT += testlib
-TARGET = x11coin-qt_test
+TARGET = magi-qt_test
 DEFINES += BITCOIN_QT_TEST
 }
 
