@@ -7,6 +7,8 @@ CXX ?= g++
 USE_UPNP:=-
 USE_IPV6:=1
 
+BOOST_SUFFIX?=-mgw48-mt-d-1_55
+
 INCLUDEPATHS= \
  -I"C:/deps/boost_1_55_0" \
  -I"c:/deps/db/build_unix" \
@@ -22,10 +24,10 @@ LIBPATHS= \
  -L"/deps/miniupnpc" 
  
 LIBS= \
- -l boost_system-mgw48-mt-d-1_55 \
- -l boost_filesystem-mgw48-mt-d-1_55 \
- -l boost_program_options-mgw48-mt-d-1_55 \
- -l boost_thread-mgw48-mt-d-1_55 \
+ -l boost_system$(BOOST_SUFFIX) \
+ -l boost_filesystem$(BOOST_SUFFIX) \
+ -l boost_program_options$(BOOST_SUFFIX) \
+ -l boost_thread$(BOOST_SUFFIX) \
  -l db_cxx \
  -l ssl \
  -l crypto
