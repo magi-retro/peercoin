@@ -9,7 +9,7 @@ LINK:=$(CXX)
 
 DEFS=-DBOOST_SPIRIT_THREADSAFE
 
-DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH))
+DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(CURDIR)/hash $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH))
 LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH))
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
@@ -131,10 +131,13 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    obj/scrypt_mine.o \
-    obj/scrypt-x86.o \
-    obj/scrypt-x86_64.o
-
+    obj/keccak.o \
+    obj/haval.o \
+    obj/ripemd.o \
+    obj/sha2.o \
+    obj/sha2big.o \
+    obj/tiger.o \
+    obj/whirlpool.o
 
 all: magid
 
