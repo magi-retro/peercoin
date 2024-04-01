@@ -398,9 +398,20 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
     // Now check if proof-of-stake hash meets target protocol
     if (CBigNum(hashProofOfStake) > bnCoinDayWeight * bnTargetPerCoinDay)
 	{
-		// printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay=%s\n", 
-		//	bnCoinDayWeight.ToString().c_str(), bnTargetPerCoinDay.ToString().c_str()); 
-		// printf(">>> CheckStakeKernelHash - hashProofOfStake too much\n");
+		if(fDebug)
+		{
+			printf(">>> nValueIn = %"PRI64d", nTimeWeight = %"PRI64d", nPrevMoneySupply = %"PRI64d"\n", nValueIn, nTimeWeight, pindexPrev->nMoneySupply);
+			CBigNum hashTargett_ = bnCoinDayWeight * bnTargetPerCoinDay;
+			printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay = %s\n",
+			bnCoinDayWeight.ToString().c_str(), bnTargetPerCoinDay.ToString().c_str());
+//			printf(">>> hashTarget = %s, hashProof = %s\n",
+//			hashTargett_.ToString().c_str(), CBigNum(hashProofOfStake).ToString().c_str());
+//			printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay = %s\n",
+//			bnCoinDayWeight.getuint256().ToString().c_str(), bnTargetPerCoinDay.getuint256().ToString().c_str());
+			printf(">>> hashTarget = %s, hashProof = %s\n",
+			hashTargett_.getuint256().ToString().c_str(), hashProofOfStake.ToString().c_str());
+			printf(">>> CheckStakeKernelHash - hashProofOfStake too much\n");
+		}
         return false;
 	}
 
