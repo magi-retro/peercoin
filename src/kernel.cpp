@@ -25,6 +25,13 @@ static std::map<int, unsigned int> mapStakeModifierCheckpoints =
     boost::assign::map_list_of
     (     0, 0xfd11f4e7u )
 ;
+
+// Hard checkpoints of stake modifiers to ensure they are deterministic (TestNet)
+static std::map<int, unsigned int> mapStakeModifierCheckpointsTestNet =
+    boost::assign::map_list_of
+        ( 0, 0x0e00670b )
+    ;
+
 inline double wfa(double x)
 {
     return (1 / (1 + exp_n( (x-0.03)/0.005 ))) + 1;
