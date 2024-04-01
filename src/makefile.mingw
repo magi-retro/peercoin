@@ -12,17 +12,17 @@ BOOST_SUFFIX?=-mgw49-mt-s-1_55
 
 INCLUDEPATHS= \
  -I"c:/deps/boost_1_55_0" \
- -I"c:/deps/db/build_unix" \
- -L"/deps/miniupnpc" \
- -L"c:/deps/" \
- -I"c:/deps/ssl/include"
- 
+ -I"c:/deps/db-4.8.30.NC/build_unix" \
+ -I"c:/deps/miniupnpc" \
+ -I"c:/deps/gmp-6.0.0" \
+ -I"c:/deps/openssl-1.0.1h/include"
+
 LIBPATHS= \
  -L"c:/deps/boost_1_55_0/stage/lib" \
- -L"c:/deps/db/build_unix" \
- -L"c:/deps/ssl"  \
- -L"c:/deps/	\
- -L"/deps/miniupnpc" 
+ -L"c:/deps/db-4.8.30.NC/build_unix" \
+ -L"c:/deps/miniupnpc" \
+ -L"c:/deps/gmp-6.0.0/.libs" \
+ -L"c:/deps/openssl-1.0.1h"
  
 LIBS= \
  -l boost_system$(BOOST_SUFFIX) \
@@ -31,12 +31,14 @@ LIBS= \
  -l boost_thread$(BOOST_SUFFIX) \
  -l db_cxx \
  -l ssl \
+ -l gmp \
  -l crypto
 
 DEFS=-DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -D__NO_SYSTEM_INCLUDES
 DEBUGFLAGS=-g
 CFLAGS=-mthreads -O2 -msse2 -w -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
-LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat
+FCFLAGS=-O2 -ffree-line-length-none
+LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -Wl,--large-address-aware
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
