@@ -489,7 +489,7 @@ unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
     CDataStream ss(SER_GETHASH, 0);
     if (pindex->pprev)
         ss << pindex->pprev->nStakeModifierChecksum;
-    ss << pindex->nFlags << pindex->hashProofOfStake << pindex->nStakeModifier;
+    ss << pindex->nFlags << (pindex->IsProofOfStake() ? pindex->hashProofOfStake : 0) << pindex->nStakeModifier;
     uint256 hashChecksum = Hash(ss.begin(), ss.end());
     hashChecksum >>= (256 - 32);
     return hashChecksum.Get64();
