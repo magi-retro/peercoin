@@ -144,7 +144,7 @@ OBJS= \
     obj/sha2big.o \
     obj/tiger.o \
     obj/whirlpool.o
-
+    
 all: magid
 
 test check: test_magi FORCE
