@@ -10,14 +10,14 @@ USE_IPV6:=1
 BOOST_SUFFIX?=-mgw49-mt-s-1_55
 
 INCLUDEPATHS= \
- -I"C:/deps/boost_1_55_0" \
+ -I"c:/deps/boost_1_55_0" \
  -I"c:/deps/db/build_unix" \
  -L"/deps/miniupnpc" \
  -L"c:/deps/" \
  -I"c:/deps/ssl/include"
  
 LIBPATHS= \
- -L"C:/deps/boost_1_55_0/stage/lib" \
+ -L"c:/deps/boost_1_55_0/stage/lib" \
  -L"c:/deps/db/build_unix" \
  -L"c:/deps/ssl"  \
  -L"c:/deps/	\
