@@ -85,17 +85,13 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    src/blake.o \
-    src/bmw.o \
-    src/groestl.o \
-    src/jh.o \
-    src/keccak.o \
-    src/skein.o \
-    src/luffa.o \
-    src/cubehash.o \
-    src/shavite.o \
-    src/echo.o \
-    src/simd.o
+    obj/keccak.o \
+    obj/haval.o \
+    obj/ripemd.o \
+    obj/sha2.o \
+    obj/sha2big.o \
+    obj/tiger.o \
+    obj/whirlpool.o
 
 all: magid.exe
 
@@ -106,6 +102,12 @@ DEFS += -DHAVE_BUILD_INFO
 
 obj/%.o: %.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(CFLAGS) -o $@ $<
+
+obj/%.o: %.c $(HEADERS)
+	i586-mingw32msvc-g++ -c $(CFLAGS) -fpermissive -o $@ $<
+
+obj/%.o: hash/%.c $(HEADERS)
+	i586-mingw32msvc-g++ -c $(CFLAGS) -fpermissive -o $@ $<
 
 magid.exe: $(OBJS:obj/%=obj/%)
 	i586-mingw32msvc-g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
