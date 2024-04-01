@@ -429,6 +429,20 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
             nTimeBlockFrom, nTxPrevOffset, txPrev.nTime, prevout.n, nTimeTx,
             hashProofOfStake.ToString().c_str());
     }
+		if(fDebug)
+		{
+			printf(">>> nValueIn = %"PRI64d", nTimeWeight = %"PRI64d"\n", nValueIn, nTimeWeight);
+			CBigNum hashTargett_ = bnCoinDayWeight * bnTargetPerCoinDay;
+			printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay = %s\n",
+			bnCoinDayWeight.ToString().c_str(), bnTargetPerCoinDay.ToString().c_str());
+//			printf(">>> hashTarget = %s, hashProof = %s\n",
+//			hashTargett_.ToString().c_str(), CBigNum(hashProofOfStake).ToString().c_str());
+//			printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay = %s\n",
+//			bnCoinDayWeight.getuint256().ToString().c_str(), bnTargetPerCoinDay.getuint256().ToString().c_str());
+			printf(">>> hashTarget = %s, hashProof = %s\n",
+			hashTargett_.getuint256().ToString().c_str(), hashProofOfStake.ToString().c_str());
+			printf(">>< Found a kernel\n");
+		}
     return true;
 }
 
