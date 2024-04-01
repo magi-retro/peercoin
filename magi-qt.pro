@@ -153,6 +153,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/coincontrol.h \
     src/sync.h \
     src/util.h \
+    src/hash.h \
     src/uint256.h \
     src/kernel.h \
     src/scrypt_mine.h \
@@ -209,20 +210,14 @@ HEADERS += src/qt/bitcoingui.h \
     src/version.h \
     src/netbase.h \
     src/clientversion.h \
-    src/hashblock.h \
-    src/sph_blake.h \
-    src/sph_skein.h \
-    src/sph_keccak.h \
-    src/sph_jh.h \
-    src/sph_groestl.h \
-    src/sph_bmw.h \
-    src/sph_types.h \
-    src/sph_luffa.h \
-    src/sph_cubehash.h \
-    src/sph_echo.h \
-    src/sph_shavite.h \
-    src/sph_simd.h \
-    src/sph_types.h 
+    src/hash_magi.h \
+    src/hash/sph_types.h \
+    src/hash/sph_keccak.h \
+    src/hash/sph_haval.h \
+    src/hash/sph_ripemd.h \
+    src/hash/sph_sha2.h \
+    src/hash/sph_tiger.h \
+    src/hash/sph_whirlpool.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -240,6 +235,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/version.cpp \
     src/sync.cpp \
     src/util.cpp \
+    src/hash.cpp \
     src/netbase.cpp \
     src/key.cpp \
     src/script.cpp \
@@ -287,17 +283,13 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/noui.cpp \
     src/kernel.cpp \
     src/pbkdf2.cpp \
-    src/blake.c \
-    src/bmw.c \
-    src/groestl.c \
-    src/jh.c \
-    src/keccak.c \
-    src/skein.c \
-    src/luffa.c \
-    src/cubehash.c \
-    src/shavite.c \
-    src/echo.c \
-    src/simd.c
+    src/hash/keccak.cpp \
+    src/hash/haval.cpp \
+    src/hash/ripemd.cpp \
+    src/hash/sha2.cpp \
+    src/hash/sha2big.cpp \
+    src/hash/tiger.cpp \
+    src/hash/whirlpool.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
